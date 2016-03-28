@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="stdataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="StockIndexes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tickerName" Type="nvarchar(max)" />
+          <Property Name="companyName" Type="nvarchar(max)" />
+          <Property Name="notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="StockQuoteLogs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stockIndexID" Type="int" Nullable="false" />
+          <Property Name="timeStamp" Type="datetime" Nullable="false" />
+          <Property Name="lastSale" Type="real" Nullable="false" />
+          <Property Name="volume" Type="real" Nullable="false" />
+          <Property Name="askSize" Type="real" Nullable="false" />
+          <Property Name="bidSize" Type="real" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="stdataModelStoreContainer">
+          <EntitySet Name="StockIndexes" EntityType="Self.StockIndexes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockQuoteLogs" EntityType="Self.StockQuoteLogs" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="stdataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="StockIndex">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tickerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="companyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="StockQuoteLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stockIndexID" Type="Int32" Nullable="false" />
+          <Property Name="timeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="lastSale" Type="Single" Nullable="false" />
+          <Property Name="volume" Type="Single" Nullable="false" />
+          <Property Name="askSize" Type="Single" Nullable="false" />
+          <Property Name="bidSize" Type="Single" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="stdataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="StockIndexes" EntityType="Self.StockIndex" />
+          <EntitySet Name="StockQuoteLogs" EntityType="Self.StockQuoteLog" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="stdataModelStoreContainer" CdmEntityContainer="stdataEntities">
+          <EntitySetMapping Name="StockIndexes">
+            <EntityTypeMapping TypeName="stdataModel.StockIndex">
+              <MappingFragment StoreEntitySet="StockIndexes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="tickerName" ColumnName="tickerName" />
+                <ScalarProperty Name="companyName" ColumnName="companyName" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockQuoteLogs">
+            <EntityTypeMapping TypeName="stdataModel.StockQuoteLog">
+              <MappingFragment StoreEntitySet="StockQuoteLogs">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="stockIndexID" ColumnName="stockIndexID" />
+                <ScalarProperty Name="timeStamp" ColumnName="timeStamp" />
+                <ScalarProperty Name="lastSale" ColumnName="lastSale" />
+                <ScalarProperty Name="volume" ColumnName="volume" />
+                <ScalarProperty Name="askSize" ColumnName="askSize" />
+                <ScalarProperty Name="bidSize" ColumnName="bidSize" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
