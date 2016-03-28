@@ -29,10 +29,7 @@
         </div>
         <div class="col-md-9 col-lg-9" style="margin-bottom: 30px;">
             <ng-include src="getTrendURL()"></ng-include>
-            <div id="stockTable">
-                No Data
-                <!-- partial view content will be inserted here -->
-            </div>
+
 
         </div>
     </div>
@@ -43,7 +40,7 @@
     var obj  = {}
     @foreach (var item in Model)
     {
-        @:obj = new tickerObj(@Html.DisplayFor(modelItem => item.ID), "@Html.DisplayFor(modelItem => item.tickerName)",0,0);
+        @:obj = new TickerObj(@Html.DisplayFor(modelItem => item.ID), "@Html.DisplayFor(modelItem => item.tickerName)");
         @://obj.name = "@Html.DisplayFor(modelItem => item.tickerName)";
         @://obj.id = @Html.DisplayFor(modelItem => item.ID);
         @://obj.isChecked = false;

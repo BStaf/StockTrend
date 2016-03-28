@@ -1,5 +1,5 @@
 ﻿@model stockDataMVC.Controllers.StockQuoteLogsController.StDataModel  
-<!--<script src="~/Scripts/TrendMenuAJS.js"></script>-->
+
 <div class="row">
     <div class="col-sm-12">
         
@@ -10,51 +10,51 @@
     @{
         //a couple of things are going on here. In Razor, I am building strings of coordinates for and SVG path.
         //in javascript, I am taking all of the values and pasing it to TrendMenuAS.js to create an object that holds all the data
-                Dictionary<int, string> penSVGStrDict = new Dictionary<int, string>();
+        Dictionary<int, string> penSVGStrDict = new Dictionary<int, string>();
                 //class penData
 
-                int x = 0;
-                int cLength = 500;
-                int cHeight = 300;
-                @:var pvObj;
-                    @:var pvAr = [];
+        int x = 0;
+        int cLength = 500;
+        int cHeight = 300;
+        @:var pvObj;
+        @:var pvAr = [];
 
-                    //each item in this dictionary contains an StData Object
-                foreach (var item in Model.stockDataDict)
-                //for (int x = 0; x < Model.stockDataDict.Count; x++)
+        @:var tickerIndex =0;
+        foreach (var item in Model.stockPenDataDict) {
+            //item.Value.stockDataList
+            @:pvAr = [];
+            //get index to javascript ticker object
+            @:tickerIndex = getTickerIndexFromID(@Html.DisplayFor(p => item.Key));
+            
+            float pMin = item.Value.minValue;
+            float pMax = item.Value.maxValue;
+            pMin = pMin - (float)(pMax * 0.01);
+            pMax = pMax + (float)(pMax * 0.01);
+            @:if (tickerIndex >= 0){
+                @:tickerList[tickerIndex].setTickerMinMax(@Html.DisplayFor(p => pMin),@Html.DisplayFor(p => pMax));
+            @:}
+            for (int i = 0; i < item.Value.stockDataList.Count; i++)
+            {
+                float yPos = cHeight - (item.Value.stockDataList[i].price - pMin) / (pMax - pMin) * cHeight;
+                float xPos = i * cLength / Model.slices + 40; //40 is the offset in pixels from beginning of y axis
+                if (penSVGStrDict.ContainsKey(item.Key))
                 {
-                    @:pvAr = [];
-                            //var item = Model.stockDataDict.Values[x];
-                    for (int i = 0; i < item.Value.Count; i++)
-                    {
+                    penSVGStrDict[item.Key] += " L" + xPos.ToString() + " " + yPos;
+                }
+                else// key not found start new entry
+                {
+                    string str = "M";
+                    str += xPos.ToString() + " " + yPos;
+                    penSVGStrDict.Add(item.Key, str);
+                }
+                @:pvObj = new PenValueObj(@Html.DisplayFor(p => item.Value.stockDataList[i].price),@Html.DisplayFor(v => item.Value.stockDataList[i].volume), '@Html.DisplayFor(t => item.Value.stockDataList[i].timestamp)', '@Html.DisplayFor(n => item.Value.tickerName)');
+                @:if (tickerIndex >= 0){
+                    @:tickerList[tickerIndex].pushLoggedData(pvObj);
+                @:}
+            }
 
-                        float pMin = Model.stockPenDataDict[item.Value[i].tickerID].minValue;
-                        float pMax = Model.stockPenDataDict[item.Value[i].tickerID].maxValue;
-                        pMin = pMin - (float)(pMax * 0.01);
-                        pMax = pMax + (float)(pMax * 0.01);
-                        float yPos = cHeight - (item.Value[i].price - pMin) / (pMax - pMin) * cHeight;
-                        if (penSVGStrDict.ContainsKey(item.Value[i].tickerID))
-                        {
-                            int xPos = x * cLength / Model.stockDataDict.Count + 40;
-                            penSVGStrDict[item.Value[i].tickerID] += " L" + xPos.ToString() + " " + yPos;
-                        }
-                        else// key not found start new entry
-                        {
-                            string str = "M";
+        }
 
-                            str += (x * cLength / Model.stockDataDict.Count + 40).ToString() + " " + yPos;
-                            penSVGStrDict.Add(item.Value[i].tickerID, str);
-                        }
-
-                        @:pvObj = new PenValue(@Html.DisplayFor(p => item.Value[i].price),@Html.DisplayFor(v => item.Value[i].volume), '@Html.DisplayFor(t => item.Key)', '@Html.DisplayFor(n => Model.stockPenDataDict[item.Value[i].tickerID].tickerName)');
-                        @:pvAr.push(pvObj);
-
-
-                    }
-                    x++;
-                    @:populateStockPrices(pvAr);
-
-                    }
     }
 </script>
         <div ng-controller="testController">
@@ -72,11 +72,11 @@
                     @:<text x="0" y="15" fill="black">@Html.DisplayFor(modelItem => maxDisp)</text>
                     @:<text x="0" y="@Html.DisplayFor(len => cHeight)" fill="black">@Html.DisplayFor(modelItem => minDisp)</text>
                     @:<path  d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
-                    @:<circle ng-attr-cx="{{coords.x}}" ng-attr-cy="{{coords.y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
+                    @:<circle ng-attr-cx="{{coords.x-2}}" ng-attr-cy="{{coords.y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
                     x++;
                 }
                 
-                <line ng-attr-x1="{{coords.x}}" y1="0" ng-attr-x2="{{coords.x}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
+                <line ng-attr-x1="{{coords.x-1.5}}" y1="0" ng-attr-x2="{{coords.x}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
                 
                       Sorry, your browser does not support inline SVG.
             </svg>
@@ -91,30 +91,31 @@
 
                 //@Html.DisplayFor(modelItem => item.Value)@:" style="stroke:black; fill:none; stroke-width:2" />
             }
-
-
-
-            <table id="searchTextResults">
-                <tr>
-                    <th>time</th>
-                    @foreach (var item in Model.stockPenDataDict)
-                    {
-                        <th>@Html.DisplayFor(modelItem => item.Value.tickerName)</th>
-                    }
-                </tr>
-                @foreach (var item in Model.stockDataDict)
+<table id="searchTextResults">
+    <tr>
+        <th>time</th>
+        
+        @foreach (var item in Model.stockPenDataDict)
+        {
+            
+            @:<th>@Html.DisplayFor(modelItem => item.Value.tickerName)</th>
+                    
+            @:</tr>
+            for (int i = 0; i < item.Value.stockDataList.Count; i++)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Key)</td>
-                        @for (int i = 0; i < item.Value.Count; i++)
-                        {
+                @:<tr>
+                    @:<td>@Html.DisplayFor(modelItem => i)</td>
+                    @:<td>@Html.DisplayFor(modelItem => item.Value.stockDataList[i].timestamp)</td>
+                    @:<td>@Html.DisplayFor(modelItem => item.Value.stockDataList[i].price)</td>
+  
 
-                            <td>@Html.DisplayFor(modelItem => item.Value[i].price)</td>
-                        }
-
-                    </tr>
+                @:</tr>
                 }
-            </table>
+        }
+        </table>
+
+
+
         </div>
     </div>
 

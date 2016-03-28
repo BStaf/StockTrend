@@ -20,31 +20,19 @@ namespace stockDataMVC.Controllers
             public float volume { get; set; }
             public DateTime timestamp { get; set; }
         }
-       /* public class ChartData
-        {
-            public List<StData> stockData { get; set; }
-            public DateTime TS { get; set; }
-
-            //only check if the datetime is equal. all otherdata is ignored
-            public bool Equals(ChartData other)
-            {
-                if (TS == other.TS)
-                    return true;
-
-                return false;
-            }
-        }*/
+        
         public class StPenData
         {
             //public int tickerID { get; set; }
             public string tickerName { get; set; }
             public float maxValue { get; set; }
             public float minValue { get; set; }
+            public IList<StData> stockDataList { get; set; }
 
         }
         public class StDataModel
         {
-            public IDictionary<DateTime, List<StData>> stockDataDict { get; set; }
+            //public IDictionary<DateTime, List<StData>> stockDataDict { get; set; }
             public IDictionary<int,StPenData> stockPenDataDict { get; set; }
             public int slices { get; set; }
            // public IEnumerable<StData> stockDataList { get; set; }
@@ -114,24 +102,7 @@ namespace stockDataMVC.Controllers
                                 volume = dg.Average(data => data.volume),
                                 time = dg.Min(data => data.timeStamp)
                             };
-                /*var query = from data in db.StockQuoteLogs
-                            //let e = new {(data.timeStamp.Ticks / divider) / 90}
-                            let d = SqlFunctions.DateAdd("mi", SqlFunctions.DateDiff("mi", startDT, data.timeStamp) / minutesToGrab, startDT)
-                            where id == data.stockIndexID && startDT <= data.timeStamp
 
-                            // orderby data.timeStamp descending
-                            group data
-                                by d into dg
-                            join t in db.StockIndexes on
-                                dg.Min(data => data.stockIndexID) equals t.ID
-                            //orderby DataAnnotationsModelMetadata.
-                            select new
-                            {
-                                tName = t.tickerName,
-                                price = dg.Average(data => data.lastSale),
-                                volume = dg.Average(data => data.volume),
-                                time = dg.Min(data => data.timeStamp)
-                            };*/
                 List<StData> sList = new List<StData>();
                 if (query.Count() > 0)
                 {
@@ -162,10 +133,13 @@ namespace stockDataMVC.Controllers
 
                         sList.Add(stObj);
                     }
-                    stPenDataDict.Add(ids,stPennObj);
+                    
+                    
                     sList = sList.OrderBy(o => o.timestamp).ToList();
+                    stPennObj.stockDataList = sList;
+                    stPenDataDict.Add(ids, stPennObj);
                     //update dictionary values
-                    for (int i = 0; i < sList.Count; i++)
+                    /*for (int i = 0; i < sList.Count; i++)
                     {
                         StData stObj = sList[i];
 
@@ -181,14 +155,14 @@ namespace stockDataMVC.Controllers
                             cdDict.Add(stObj.timestamp, cdList);
                         }
 
-                    }
+                    }*/
                 }
                     //stDataList.Add(sList);
           //  }
 
 
 
-            sModel.stockDataDict = cdDict;
+            //sModel.stockDataDict = cdDict;
             sModel.stockPenDataDict = stPenDataDict;
             sModel.slices = timeSlices;
 
