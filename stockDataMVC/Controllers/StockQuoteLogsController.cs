@@ -32,7 +32,6 @@ namespace stockDataMVC.Controllers
         }
         public class StDataModel
         {
-            //public IDictionary<DateTime, List<StData>> stockDataDict { get; set; }
             public IDictionary<int,StPenData> stockPenDataDict { get; set; }
             public int slices { get; set; }
            // public IEnumerable<StData> stockDataList { get; set; }
@@ -58,38 +57,43 @@ namespace stockDataMVC.Controllers
             return retVal;
         }
         // GET: StockQuoteLogs/DataTrend/5
-        public ActionResult DataTrend(int? id)
+        public ActionResult DataTrend(string id)
         {
-            IList<int> formData = new List<int>();
-            SortedDictionary<DateTime,List<StData>> cdDict = new SortedDictionary<DateTime,List<StData>>();
             Dictionary<int,StPenData> stPenDataDict = new Dictionary<int,StPenData>();
             StDataModel sModel = new StDataModel();
             int trendedDays = 5;
             DateTime startDT = DateTime.Now.AddDays(-trendedDays);
             startDT= startDT.AddHours(startDT.Hour * -1);
             int timeSlices = 100;
+            int actualSlices = 0;//sometimes the timeslices I get don't match the amount I'm lookign for. This is my quick fix until I figure this out
             int minutesToGrab = getLoggedDays(startDT, DateTime.Now);
             minutesToGrab = minutesToGrab * 450 / timeSlices;
            
-            //foreach ticker, query for its data in whatever time incremement gets me 30 slices
-            //foreach (var cBox in collection)
-           // {
-            //string cBox = collection;
-           // int id;
-            if (id == null)
+
+            if (id == "")
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            int ids = (int)id;
-           // else id = (int)ids;// Convert.ToInt32(cBox);
-                //long divider = 10000*1000*60;
+            var idStrList = id.Split('_');
 
+            int ids = 0;
+            //I get a string in the format of the ticker ID's (ex. "1_2_3_4") this gets parsed into an array of id's as strings
+            foreach (var idStr in idStrList){
+                try
+                {
+                    ids = Int32.Parse(idStr);//attempt to convert string to integer
+                }
+                catch (FormatException e)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);//if conversion fails, the fail page load
+                }
+                //query for each id
                 var query = from data in db.StockQuoteLogs
                             //let e = new {(data.timeStamp.Ticks / divider) / 90}
                             let d = SqlFunctions.DateAdd("mi", SqlFunctions.DateDiff("mi", DateTime.MinValue, data.timeStamp) / minutesToGrab, DateTime.MinValue)
-                            where id == data.stockIndexID && startDT < data.timeStamp 
+                            where ids == data.stockIndexID && startDT < data.timeStamp 
                             
-                           // orderby data.timeStamp descending
+                            // orderby data.timeStamp descending
                             group data
                                 by d into dg
                             join t in db.StockIndexes on
@@ -111,6 +115,7 @@ namespace stockDataMVC.Controllers
                     stPennObj.tickerName = "";
                     stPennObj.maxValue = 0;
                     stPennObj.minValue = 0;
+                    actualSlices = 0;
                     
                     foreach (var item in query)
                     {
@@ -132,45 +137,24 @@ namespace stockDataMVC.Controllers
                         stObj.volume = item.volume;
 
                         sList.Add(stObj);
+                        actualSlices++;
                     }
                     
                     
                     sList = sList.OrderBy(o => o.timestamp).ToList();
                     stPennObj.stockDataList = sList;
                     stPenDataDict.Add(ids, stPennObj);
-                    //update dictionary values
-                    /*for (int i = 0; i < sList.Count; i++)
-                    {
-                        StData stObj = sList[i];
 
-                        if (cdDict.ContainsKey(stObj.timestamp))
-                        {
-                            cdDict[stObj.timestamp].Add(stObj);
-                            //maybe check for duplicates
-                        }
-                        else
-                        {
-                            List<StData> cdList = new List<StData>();
-                            cdList.Add(stObj);
-                            cdDict.Add(stObj.timestamp, cdList);
-                        }
-
-                    }*/
                 }
-                    //stDataList.Add(sList);
-          //  }
-
-
-
-            //sModel.stockDataDict = cdDict;
+            }
             sModel.stockPenDataDict = stPenDataDict;
-            sModel.slices = timeSlices;
+            sModel.slices = actualSlices;
 
            // sModel.stockDataList = (IEnumerable)stDataList;
             return View(sModel);
         }
         // GET: StockQuoteLogs/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id)/*(ICollection<int> ids)*/
         {
             if (id == null)
             {

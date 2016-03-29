@@ -106,6 +106,16 @@ TickerObj.prototype.getTimeStamp = function (index_) {
     }
     return retVal;
 };
+//returns price ticker name at that index
+//TickerObj.prototype.getName = function (index_) {
+    /*var retVal = '';
+    if (this.penDataAr != null) {
+        if (index_ < this.penDataAr.length) {
+            retVal = this.penDataAr[index_].name;
+        }
+    }*/
+    //return this.name;
+//};
 /***************************************************************************                             
 *                          end TickerObj class
 ***************************************************************************/
@@ -156,30 +166,64 @@ setDataforTicker = function (tickerID_,tickerMax_, tickerMin_){
 var trendsApp = angular.module('trendsApp', []);
 trendsApp.controller("myCtrl", ["$scope", function ($scope) {
     $scope.list = tickerList;
-    $scope.tickerID = "0";
+    $scope.tickerIDAr = [];
+   // $scope.tickerIDAr.push(0);
 
     $scope.submitData = function () {
+        $scope.tickerIDAr = [];
         for (var i in $scope.list) {
             var it = $scope.list[i];
             if (it.isChecked) {
-                $scope.tickerID = it.id;
+                $scope.tickerIDAr.push(it.id);
             }
         }
-        
     };
+    //greates the link to the parital page call (this is the chart page)
     $scope.getTrendURL = function () {
-        var path = '/StockQuoteLogs/DataTrend/' + $scope.tickerID;
+        var path = '/StockQuoteLogs/DataTrend/';//
+        if ($scope.tickerIDAr.length > 0) {
+            for (i = 0; i < $scope.tickerIDAr.length;i++) {
+                path += $scope.tickerIDAr[i] + '_';
+            }
+            path = path.substring(0, path.length - 1); //remove last &
+        }
+        else
+            path += '0'
         return path;
     };
+    /*var getSelectedTickers = function () {
+        return productList;
+    };*/
 
 }]);
 
 trendsApp.controller('testController', function ($scope) {
     $scope.testt = "hello";
-    $scope.onMouseMoveResult = "zzz";
+   // $scope.onMouseMoveResult = "zzz";
     $scope.timeSlices = 0;
 
-
+    var penCoord = {
+        timeStamp: '',
+        price: 0,
+        y: 0
+    };
+    //holds data for each individual pen to be displayed on the page as the ruler moves
+    PenCoord = function (timeStamp_,name_,price_,volume_,yPos_){
+        this.timeStamp = timeStamp_;
+        this.price = price_;
+        this.volume = volume_;
+        this.y = yPos_;
+        this.name = name_;
+    };
+    //holds all data to display each pen value and dot position when the ruler is used
+    $scope.rulerData = {
+        length: 500,
+        height: 300,
+        offset: 40,
+        x: 40,
+        penCoords: []
+    };
+    /*
     $scope.coords = {
         length: 500,
         height: 300,
@@ -189,6 +233,7 @@ trendsApp.controller('testController', function ($scope) {
         x: 40,
         y: 0
     };
+*/
 
 
     /*var getMouseEventResult = function (mouseEvent, mouseEventDesc)
@@ -199,29 +244,39 @@ trendsApp.controller('testController', function ($scope) {
 
 
     $scope.onMouseMove = function ($event) {
+        setRulerData($event.offsetX);
+    }
+
+    setRulerData = function(xPos_){
         //get x position as it will appear on the chart
-        $scope.coords.x = $event.offsetX;
+        $scope.rulerData.x = xPos_;
         var index = 0;
         //get 0 - 100% position across the chart
         
-        if ($scope.coords.x < $scope.coords.offset) {
-            $scope.coords.x = $scope.coords.offset;
+        if ($scope.rulerData.x < $scope.rulerData.offset) {
+            $scope.rulerData.x = $scope.rulerData.offset;
            // $scope.coords.index = 0;
         }
-        else if ($scope.coords.x > $scope.coords.length) {
-            $scope.coords.x = $scope.coords.length;
+        else if ($scope.rulerData.x > $scope.rulerData.length) {
+            $scope.rulerData.x = $scope.rulerData.length;
             index = $scope.timeSlices-1;
         }
-        $scope.coords.y = 0;
-        //figure out index of data on trend where the mouse is
-        index = Math.floor(($scope.coords.x - $scope.coords.offset) / ($scope.coords.length/* - $scope.coords.offset*/) * $scope.timeSlices);
+        //clear individual pen coordinate array
+        $scope.rulerData.penCoords = [];
+        index = Math.floor(($scope.rulerData.x - $scope.rulerData.offset) / ($scope.rulerData.length/* - $scope.coords.offset*/) * $scope.timeSlices);
         if (tickerList != null) {
-            $scope.coords.y = $scope.coords.height - (tickerList[0].rangePrice(index) * $scope.coords.height);
-            $scope.coords.price = tickerList[0].getPrice(index);
-            $scope.coords.timeStamp = tickerList[0].getTimeStamp(index);
+            for (i = 0; i < tickerList.length; i++) {
+                if (tickerList[i].isChecked) {
+                    var pCoord = new PenCoord(tickerList[i].getTimeStamp(index), tickerList[i].name, tickerList[i].getPrice(index), 0, 0);
+                    pCoord.y = $scope.rulerData.height - (tickerList[i].rangePrice(index) * $scope.rulerData.height);
+                    $scope.rulerData.penCoords.push(pCoord);
+                }
+            }
         }
 
-        $scope.onMouseMoveResult = "(" + $scope.coords.timeStamp + ", " + $scope.coords.price + ")"; //getMouseEventResult($event, "Mouse move");
+
+
+        
     };
     $scope.onMouseDown = function ($event) {
         coords = getCrossBrowserElementCoords($event);

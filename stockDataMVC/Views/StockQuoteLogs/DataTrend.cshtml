@@ -72,19 +72,29 @@
                     @:<text x="0" y="15" fill="black">@Html.DisplayFor(modelItem => maxDisp)</text>
                     @:<text x="0" y="@Html.DisplayFor(len => cHeight)" fill="black">@Html.DisplayFor(modelItem => minDisp)</text>
                     @:<path  d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
-                    @:<circle ng-attr-cx="{{coords.x-2}}" ng-attr-cy="{{coords.y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
+                    @:<circle ng-attr-cx="{{rulerData.x-2}}" ng-attr-cy="{{rulerData.penCoords[x].y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
                     x++;
                 }
                 
-                <line ng-attr-x1="{{coords.x-1.5}}" y1="0" ng-attr-x2="{{coords.x}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
+                <line ng-attr-x1="{{rulerData.x-1.5}}" y1="0" ng-attr-x2="{{rulerData.x-1.5}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
                 
                       Sorry, your browser does not support inline SVG.
             </svg>
 
             <br />
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr><th>Ticker</th><th>TimeStamp</th><th>Price</th></tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in rulerData.penCoords">
+                        <td>{{item.name}}</td>
+                        <td>{{item.timeStamp}}</td>
+                        <td>{{item.price| currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <strong>MOUSE MOVE RESULT:</strong> {{onMouseMoveResult}}<br />
-            {{'yet' + '!'}}
         </div>
             @foreach (var item in penSVGStrDict)
             {
