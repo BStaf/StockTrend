@@ -16,27 +16,75 @@
         int x = 0;
         int cLength = 500;
         int cHeight = 300;
+        bool muliplePens = false;
+        float xPos, yPos;
+        float pMin = 0;
+        float pMax = 0;
+        float minPercentOffset = 0;
         @:var pvObj;
         @:var pvAr = [];
 
         @:var tickerIndex =0;
+        if (Model.stockPenDataDict.Count > 1){
+            muliplePens = true;
+            bool firstPass = true;
+            //get the largest Max value and smallest Min values of all pens
+            foreach (var item in Model.stockPenDataDict)
+            {
+                if (firstPass)
+                {
+                    pMax = item.Value.maxValue;
+                    pMin = item.Value.minValue;
+                    firstPass = false;
+                }
+                else
+                {
+                    if (pMax < item.Value.maxValue)
+                    {
+                        pMax = item.Value.maxValue;
+                    }
+                    if (pMin > item.Value.minValue)
+                    {
+                        pMin = item.Value.minValue;
+                    }
+                }
+            }
+            if (pMin < 0)
+            {
+                minPercentOffset = pMin * -1;
+            }
+            
+        }
+            
         foreach (var item in Model.stockPenDataDict) {
             //item.Value.stockDataList
             @:pvAr = [];
             //get index to javascript ticker object
             @:tickerIndex = getTickerIndexFromID(@Html.DisplayFor(p => item.Key));
             
-            float pMin = item.Value.minValue;
-            float pMax = item.Value.maxValue;
-            pMin = pMin - (float)(pMax * 0.01);
-            pMax = pMax + (float)(pMax * 0.01);
+            
+            if (!muliplePens){
+                pMax = item.Value.maxValue;
+                pMin = item.Value.minValue - (float)(pMax * 0.01);
+                pMax = pMax + (float)(pMax * 0.01);
+            }
             @:if (tickerIndex >= 0){
                 @:tickerList[tickerIndex].setTickerMinMax(@Html.DisplayFor(p => pMin),@Html.DisplayFor(p => pMax));
             @:}
             for (int i = 0; i < item.Value.stockDataList.Count; i++)
             {
-                float yPos = cHeight - (item.Value.stockDataList[i].price - pMin) / (pMax - pMin) * cHeight;
-                float xPos = i * cLength / Model.slices + 40; //40 is the offset in pixels from beginning of y axis
+                float chartPoint = item.Value.stockDataList[i].price;
+                float chartMin = pMin;
+                float chartMax = pMax;
+
+                if (muliplePens) {
+                    chartPoint = item.Value.stockDataList[i].percent+minPercentOffset;
+                    chartMin = pMin + minPercentOffset;
+                    chartMax = pMax + minPercentOffset;
+                }
+                yPos = cHeight - (chartPoint - chartMin) / (chartMax - chartMin) * cHeight;
+                xPos = i * cLength / Model.slices + 40; //40 is the offset in pixels from beginning of y axis
+
                 if (penSVGStrDict.ContainsKey(item.Key))
                 {
                     penSVGStrDict[item.Key] += " L" + xPos.ToString() + " " + yPos;
@@ -57,51 +105,62 @@
 
     }
 </script>
-        <div ng-controller="testController">
-            {{timeSlices=@Html.DisplayFor(sl => Model.slices);}}
-            <svg height="@Html.DisplayFor(len => cHeight)" width="@Html.DisplayFor(len => cLength)" ng-mousemove="onMouseMove($event)" ng->
-                <path d="M40 0 L40 @Html.DisplayFor(len => cHeight) L @Html.DisplayFor(len => cLength) @Html.DisplayFor(len => cHeight)" style="stroke:black; fill:none; stroke-width:2" />
-                @{
-                    List<string> penColors = new List<string> { "blue", "red", "green", "yellow", "grey", "lightblue" };
-                    x = 0;
-                }
-                @foreach (var item in penSVGStrDict)
-                {
-                    string maxDisp = (Model.stockPenDataDict[item.Key].maxValue + Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
-                    string minDisp = (Model.stockPenDataDict[item.Key].minValue - Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
-                    @:<text x="0" y="15" fill="black">@Html.DisplayFor(modelItem => maxDisp)</text>
-                    @:<text x="0" y="@Html.DisplayFor(len => cHeight)" fill="black">@Html.DisplayFor(modelItem => minDisp)</text>
-                    @:<path  d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
-                    @:<circle ng-attr-cx="{{rulerData.x-2}}" ng-attr-cy="{{rulerData.penCoords[x].y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
-                    x++;
-                }
-                
-                <line ng-attr-x1="{{rulerData.x-1.5}}" y1="0" ng-attr-x2="{{rulerData.x-1.5}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
-                
-                      Sorry, your browser does not support inline SVG.
-            </svg>
+        <div ng-controller="testController" ng-init="timeSlices=@Html.DisplayFor(sl => Model.slices);">
+           
+                <svg height="@Html.DisplayFor(len => cHeight)" width="@Html.DisplayFor(len => cLength)" ng-mousemove="onMouseMove($event)" ng->
+                    <path d="M40 0 L40 @Html.DisplayFor(len => cHeight) L @Html.DisplayFor(len => cLength) @Html.DisplayFor(len => cHeight)" style="stroke:black; fill:none; stroke-width:2" />
+                    @{
+                        List<string> penColors = new List<string> { "blue", "red", "green", "yellow", "grey", "lightblue" };
+                        x = 0;
+                    }
+                    @foreach (var item in penSVGStrDict)
+                    {
+                        //string maxDisp = (Model.stockPenDataDict[item.Key].maxValue + Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
+                        // string minDisp = (Model.stockPenDataDict[item.Key].minValue - Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
 
-            <br />
-            <table class="table table-striped table-condensed table-hover">
-                <thead>
-                    <tr><th>Ticker</th><th>TimeStamp</th><th>Price</th></tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in rulerData.penCoords">
-                        <td>{{item.name}}</td>
-                        <td>{{item.timeStamp}}</td>
-                        <td>{{item.price| currency}}</td>
-                    </tr>
-                </tbody>
-            </table>
+                        @:
+                        <path d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
+                        @:
+                        <circle ng-attr-cx="{{rulerData.x-2}}" ng-attr-cy="{{rulerData.penCoords[x].y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
+                        x++;
+                    }
+                    @{
+                        string maxDisp = pMax.ToString("0.0");
+                        string minDisp = pMin.ToString("0.0");
+                        if (muliplePens)
+                        {
+                            maxDisp += "%";
+                            minDisp += "%";
+                        }
+                    }
+                    <text x="0" y="15" fill="black">@Html.DisplayFor(modelItem => maxDisp)</text>
+                    <text x="0" y="@Html.DisplayFor(len => cHeight)" fill="black">@Html.DisplayFor(modelItem => minDisp)</text>
+                    <line ng-attr-x1="{{rulerData.x-1.5}}" y1="0" ng-attr-x2="{{rulerData.x-1.5}}" y2="@Html.DisplayFor(len => cHeight)" style="stroke:rgb(0,0,0);stroke-width:1" stroke-dasharray="5,5" />
 
-        </div>
+                    Sorry, your browser does not support inline SVG.
+                </svg>
+
+                <br />
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <tr><th>Ticker</th><th>TimeStamp</th><th>Price</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in rulerData.penCoords">
+                            <td>{{item.name}}</td>
+                            <td>{{item.timeStamp}}</td>
+                            <td>{{item.price| currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+</div>
             @foreach (var item in penSVGStrDict)
             {
 
                 //@Html.DisplayFor(modelItem => item.Value)@:" style="stroke:black; fill:none; stroke-width:2" />
             }
-<table id="searchTextResults">
+<!--<table id="searchTextResults">
     <tr>
         <th>time</th>
         
@@ -122,7 +181,7 @@
                 @:</tr>
                 }
         }
-        </table>
+        </table>-->
 
 
 

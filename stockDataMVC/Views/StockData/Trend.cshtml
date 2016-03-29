@@ -41,9 +41,6 @@
     @foreach (var item in Model)
     {
         @:obj = new TickerObj(@Html.DisplayFor(modelItem => item.ID), "@Html.DisplayFor(modelItem => item.tickerName)");
-        @://obj.name = "@Html.DisplayFor(modelItem => item.tickerName)";
-        @://obj.id = @Html.DisplayFor(modelItem => item.ID);
-        @://obj.isChecked = false;
         @:tList.push(obj);
     }
     setTickerList(tList);

@@ -17,6 +17,7 @@ namespace stockDataMVC.Controllers
         {
             public int tickerID { get; set; }
             public float price { get; set; }
+            public float percent { get; set; }
             public float volume { get; set; }
             public DateTime timestamp { get; set; }
         }
@@ -37,6 +38,7 @@ namespace stockDataMVC.Controllers
            // public IEnumerable<StData> stockDataList { get; set; }
 
         }
+
         private stdataEntities db = new stdataEntities();
 
         // GET: StockQuoteLogs
@@ -56,17 +58,29 @@ namespace stockDataMVC.Controllers
             
             return retVal;
         }
+        //retruns previous logged day Weekend days are excluded
+        private DateTime getPerviousLoggedDay(DateTime DT)
+        {
+            DateTime retVal = DT.AddDays(-1);
+            if ((int)retVal.DayOfWeek == 6)
+                retVal = DT.AddDays(-1);
+            if ((int)retVal.DayOfWeek == 0)
+                retVal = DT.AddDays(-1);
+            return retVal;
+        }
         // GET: StockQuoteLogs/DataTrend/5
         public ActionResult DataTrend(string id)
         {
             Dictionary<int,StPenData> stPenDataDict = new Dictionary<int,StPenData>();
+            Dictionary<int,float> lastPriceDict = new Dictionary<int,float>();
             StDataModel sModel = new StDataModel();
             int trendedDays = 5;
             DateTime startDT = DateTime.Now.AddDays(-trendedDays);
             startDT= startDT.AddHours(startDT.Hour * -1);
-            int timeSlices = 100;
+            int timeSlices = 200;
             int actualSlices = 0;//sometimes the timeslices I get don't match the amount I'm lookign for. This is my quick fix until I figure this out
             int minutesToGrab = getLoggedDays(startDT, DateTime.Now);
+            bool multiplePens = false;
             minutesToGrab = minutesToGrab * 450 / timeSlices;
            
 
@@ -74,10 +88,27 @@ namespace stockDataMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var idStrList = id.Split('_');
+            
 
             int ids = 0;
+
             //I get a string in the format of the ticker ID's (ex. "1_2_3_4") this gets parsed into an array of id's as strings
+            var idStrList = id.Split('_');
+            if (idStrList.Length > 1){
+                multiplePens = true;
+            }
+            var query2 = from data in db.StockQuoteLogs
+                                where data.timeStamp < startDT
+                                group data by data.stockIndexID into grp
+                                let LastSalePriceThatDay = grp.Max(g => g.timeStamp)
+                                  
+                                from data in grp
+                                where data.timeStamp == LastSalePriceThatDay
+                                select data;
+            //create dictionary of the sale price of the last day before trend period
+            foreach (var item in query2){
+                lastPriceDict.Add(item.stockIndexID,item.lastSale);
+            }
             foreach (var idStr in idStrList){
                 try
                 {
@@ -87,6 +118,7 @@ namespace stockDataMVC.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);//if conversion fails, the fail page load
                 }
+
                 //query for each id
                 var query = from data in db.StockQuoteLogs
                             //let e = new {(data.timeStamp.Ticks / divider) / 90}
@@ -116,28 +148,50 @@ namespace stockDataMVC.Controllers
                     stPennObj.maxValue = 0;
                     stPennObj.minValue = 0;
                     actualSlices = 0;
-                    
+                    //float lastPrice = 0;
+                    bool FirstPass = true;
                     foreach (var item in query)
                     {
                         StData stObj = new StData();
                         stObj.tickerID = ids;// item.tName;// id.ToString();
-                        //if the ticker name is empty, assume first run
-                        if (stPennObj.tickerName == ""){
-                            stPennObj.tickerName = item.tName;
-                            stPennObj.maxValue = item.price;
-                            stPennObj.minValue = item.price;
-                        }
                         stObj.timestamp = item.time;
                         stObj.price = item.price;
-                        //update max and min values
-                        if (stObj.price > stPennObj.maxValue)
-                            stPennObj.maxValue = stObj.price;
-                        else if (stObj.price < stPennObj.minValue)
-                            stPennObj.minValue = stObj.price;
                         stObj.volume = item.volume;
-
+                        //more than one pen, chart will show percent movements instead of price
+                        if (multiplePens)
+                        {
+                            stObj.percent = ((item.price / lastPriceDict[ids]) - 1) * 100;
+                            if (FirstPass)
+                            {
+                                stPennObj.tickerName = item.tName;
+                                stPennObj.maxValue = stObj.percent;
+                                stPennObj.minValue = stObj.percent;
+                                FirstPass = false;
+                            }
+                            //update max and min values
+                            if (stObj.percent > stPennObj.maxValue)
+                                stPennObj.maxValue = stObj.percent;
+                            else if (stObj.percent < stPennObj.minValue)
+                                stPennObj.minValue = stObj.percent;
+                        }
+                        else
+                        {
+                            if (FirstPass)
+                            {
+                                stPennObj.tickerName = item.tName;
+                                stPennObj.maxValue = item.price;
+                                stPennObj.minValue = item.price;
+                                FirstPass = false;
+                            }
+                            //update max and min values
+                            if (stObj.price > stPennObj.maxValue)
+                                stPennObj.maxValue = stObj.price;
+                            else if (stObj.price < stPennObj.minValue)
+                                stPennObj.minValue = stObj.price;
+                        }
                         sList.Add(stObj);
                         actualSlices++;
+                        
                     }
                     
                     

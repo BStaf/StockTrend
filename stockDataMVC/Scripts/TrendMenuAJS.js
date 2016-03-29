@@ -33,10 +33,7 @@ PenValueObj = function (price_, volume_, timestamp_, tName_) {
     this.timestamp = timestamp_;
     this.tName = tName_;
 };
-/*PenDictObj = function (key, pVal) {
-    this.key = key;
-    this.penValue = pVal;
-}*/
+
 /***************************************************************************
 *                           TickerObj class
 *   Main stock object used in selecting stocks to be trended and used in
@@ -106,16 +103,7 @@ TickerObj.prototype.getTimeStamp = function (index_) {
     }
     return retVal;
 };
-//returns price ticker name at that index
-//TickerObj.prototype.getName = function (index_) {
-    /*var retVal = '';
-    if (this.penDataAr != null) {
-        if (index_ < this.penDataAr.length) {
-            retVal = this.penDataAr[index_].name;
-        }
-    }*/
-    //return this.name;
-//};
+
 /***************************************************************************                             
 *                          end TickerObj class
 ***************************************************************************/
@@ -141,25 +129,7 @@ setDataforTicker = function (tickerID_,tickerMax_, tickerMin_){
         }
     }
 }
-//create reusable object for each price log
 
-//populateStockPrices = function (penDictObj) {
- //   stockPrcies.push(penDictObj);
-
-    /*var pValue = new PenValue(pvObj.price, pvObj.volume, pvObj.timestamp);
-    
-
-    var index = stockPrcies.indexOf(tickerName);
-    if (stockPrcies[tickerName] == null) {
-        var dictObj = { tickerName, obj: [] };
-        dictObj.obj.push(pvObj);
-        stockPrcies = dictObj;//[tickerName] = pValue;
-    }
-    else {
-        stockPrcies[tickerName].push(pValue);
-    }*/
-
-//};
 /***************************************************************************                             
 *                          Angular Logic
 ***************************************************************************/
@@ -223,25 +193,6 @@ trendsApp.controller('testController', function ($scope) {
         x: 40,
         penCoords: []
     };
-    /*
-    $scope.coords = {
-        length: 500,
-        height: 300,
-        offset: 40,
-        timeStamp: '',
-        price: 0,
-        x: 40,
-        y: 0
-    };
-*/
-
-
-    /*var getMouseEventResult = function (mouseEvent, mouseEventDesc)
-    {
-        var coords = getCrossBrowserElementCoords(mouseEvent);
-        return mouseEventDesc + " at (" + coords.x + ", " + coords.y + ")";
-    };*/
-
 
     $scope.onMouseMove = function ($event) {
         setRulerData($event.offsetX);
@@ -273,15 +224,9 @@ trendsApp.controller('testController', function ($scope) {
                 }
             }
         }
-
-
-
-        
+      
     };
     $scope.onMouseDown = function ($event) {
         coords = getCrossBrowserElementCoords($event);
     }
-   // $scope.onMouseOver = function ($event) {
-   //     $scope.onMouseOverResult = getMouseEventResult($event, "Mouse over");
-   // };
 });
