@@ -84,7 +84,7 @@ namespace stockDataMVC.Controllers
             minutesToGrab = minutesToGrab * 450 / timeSlices;
            
 
-            if (id == "")
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<stockDataMVC.Models.StockIndex>
+@{
+    ViewBag.Title = "Trend";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var outData = "";
+}
+<script src="~/Scripts/TrendMenuAJS.js"></script>
+<h2>Trend</h2>
+<div class="row" ng-app="trendsApp" ng-controller="myCtrl">
+    <div class="col-sm-12">
+        <!--style="text-align: center; "-->
+        <div class="col-md-3 col-lg-3" style="margin-bottom: 30px;">
+
+            <form>
+                <label>Search: <input ng-model="searchText"></label>
+                <table id="searchTextResults">
+                    <tr><th>ticker</th></tr>
+                    <tr ng-repeat="it in list | filter:searchText">
+                        <!-- <td><input type="checkbox" name="{{it.id}}" onchange="updateTrendList();"><span>{{it.name}}</span></td>-->
+                        <td><input type="checkbox" name="{{it.id}}" ng-model="it.isChecked"><span>{{it.name}} </span></td>
+
+                    </tr>
+                </table>
+
+                    <!--<input type="submit" value="OK" />-->
+               
+                <input type="button" ng-click="submitData()" value="OK" />
+            </form>
+        </div>
+        <div class="col-md-9 col-lg-9" style="margin-bottom: 30px;">
+            <ng-include src="getTrendURL()"></ng-include>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var tList = []
+    var obj  = {}
+    @foreach (var item in Model)
+    {
+        @:obj = new TickerObj(@Html.DisplayFor(modelItem => item.ID), "@Html.DisplayFor(modelItem => item.tickerName)");
+        @:tList.push(obj);
+    }
+    setTickerList(tList);
+
+</script>
+  

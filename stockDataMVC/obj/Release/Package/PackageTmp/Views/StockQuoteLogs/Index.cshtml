@@ -1,0 +1,64 @@
+﻿@model IEnumerable<stockDataMVC.Models.StockQuoteLog>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.stockIndexID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.timeStamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastSale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.volume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.askSize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bidSize)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.stockIndexID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.timeStamp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastSale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.volume)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.askSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bidSize)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
