@@ -12,7 +12,12 @@ namespace stockDataMVC.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    public class stockQuoteCalc
+    {
+        public double price { get; set; }
+        public double volume { get; set; }
+        public DateTime time { get; set; }
+    }
     public partial class stdataEntities : DbContext
     {
         public stdataEntities()
@@ -24,8 +29,9 @@ namespace stockDataMVC.Models
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+        
         public virtual DbSet<StockIndex> StockIndexes { get; set; }
         public virtual DbSet<StockQuoteLog> StockQuoteLogs { get; set; }
+        public virtual DbSet<stockQuoteCalc> stockQuoteCalcs { get; set; }
     }
 }

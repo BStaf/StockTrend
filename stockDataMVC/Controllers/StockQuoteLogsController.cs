@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Data.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -68,6 +69,12 @@ namespace stockDataMVC.Controllers
                 retVal = DT.AddDays(-1);
             return retVal;
         }
+        public class queryParameters{
+            public float price { get; set; }
+            public int volume { get; set; }
+            public DateTime time { get; set; }
+        }
+        
         // GET: StockQuoteLogs/DataTrend/5
         public ActionResult DataTrend(string id)
         {
@@ -97,19 +104,21 @@ namespace stockDataMVC.Controllers
             if (idStrList.Length > 1){
                 multiplePens = true;
             }
-            var query2 = from data in db.StockQuoteLogs
+            var query2 = (from data in db.StockQuoteLogs
                                 where data.timeStamp < startDT
                                 group data by data.stockIndexID into grp
                                 let LastSalePriceThatDay = grp.Max(g => g.timeStamp)
                                   
                                 from data in grp
                                 where data.timeStamp == LastSalePriceThatDay
-                                select data;
+                                select data);
             //create dictionary of the sale price of the last day before trend period
             foreach (var item in query2){
-                lastPriceDict.Add(item.stockIndexID,item.lastSale);
+                lastPriceDict.Add(item.stockIndexID,(float)item.lastSale);
             }
-            foreach (var idStr in idStrList){
+            for (int i=0;i<idStrList.Length;i++){
+                if (i >= 5) break;
+                string idStr = idStrList[i];
                 try
                 {
                     ids = Int32.Parse(idStr);//attempt to convert string to integer
@@ -120,7 +129,8 @@ namespace stockDataMVC.Controllers
                 }
 
                 //query for each id
-                var query = from data in db.StockQuoteLogs
+                //this works but produces a rediculous query// I'll revisit this when I can efficiently do this query in linq 
+                var query = (from data in db.StockQuoteLogs
                             //let e = new {(data.timeStamp.Ticks / divider) / 90}
                             let d = SqlFunctions.DateAdd("mi", SqlFunctions.DateDiff("mi", DateTime.MinValue, data.timeStamp) / minutesToGrab, DateTime.MinValue)
                             where ids == data.stockIndexID && startDT < data.timeStamp 
@@ -128,17 +138,30 @@ namespace stockDataMVC.Controllers
                             // orderby data.timeStamp descending
                             group data
                                 by d into dg
-                            join t in db.StockIndexes on
-                                dg.Min(data => data.stockIndexID) equals t.ID
+                           // join t in db.StockIndexes on
+                          //      dg.Min(data => data.stockIndexID) equals t.ID
                             //orderby DataAnnotationsModelMetadata.
-                            select new
+                            select new 
                             {
-                                tName = t.tickerName,
                                 price = dg.Average(data => data.lastSale),
                                 volume = dg.Average(data => data.volume),
-                                time = dg.Min(data => data.timeStamp)
-                            };
+                                time = dg.Min(data => data.timeStamp),
+                            });
 
+               /* string qStr = @"SELECT min(timeStamp) as time,avg(lastSale) as price,0.0 as volume "+//, min(ID) as ID, min(stockIndexID) as stockIndexID , 0 as askSize , 0 as bidSize " +
+                    @"FROM dbo.StockQuoteLogs where stockIndexID = " +
+                    ids.ToString()+ @" AND timeStamp > '"+
+                    startDT.ToString() + @"' group by DATEADD(MINUTE , DATEDIFF(MINUTE,0,timeStamp)/"+
+                    minutesToGrab.ToString() + @", 0) ORDER BY timeStamp ASC";
+
+
+                /*SELECT min(timeStamp) as time,avg(lastSale) as price,avg(volume) as volume
+  FROM dbo.StockQuoteLogs
+  where stockIndexID = 1 AND timeStamp > '3/28/16'
+  group by DATEADD(MINUTE , DATEDIFF(MINUTE,0,timeStamp)/15, 0)
+	ORDER BY time ASC*/
+                //var query = db.stockQuoteCalcs.SqlQuery(qStr).ToList();*/
+                //List<queryParameters> query = db.StockQuoteLogs.SqlQuery(qStr);
                 List<StData> sList = new List<StData>();
                 if (query.Count() > 0)
                 {
@@ -163,7 +186,7 @@ namespace stockDataMVC.Controllers
                             stObj.percent = ((item.price / lastPriceDict[ids]) - 1) * 100;
                             if (FirstPass)
                             {
-                                stPennObj.tickerName = item.tName;
+
                                 stPennObj.maxValue = stObj.percent;
                                 stPennObj.minValue = stObj.percent;
                                 FirstPass = false;
@@ -178,7 +201,6 @@ namespace stockDataMVC.Controllers
                         {
                             if (FirstPass)
                             {
-                                stPennObj.tickerName = item.tName;
                                 stPennObj.maxValue = item.price;
                                 stPennObj.minValue = item.price;
                                 FirstPass = false;
