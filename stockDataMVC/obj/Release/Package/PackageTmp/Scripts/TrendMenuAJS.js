@@ -27,8 +27,9 @@ var stockPrcies = [];
 
 
 //object that holds stock data for 1 logged period for 1 ticker
-PenValueObj = function (price_, volume_, timestamp_, tName_) {
+PenValueObj = function (price_, percent_, volume_, timestamp_, tName_) {
     this.price = price_;
+    this.percent = percent_;
     this.volume = volume_;
     this.timestamp = timestamp_;
     this.tName = tName_;
@@ -69,15 +70,32 @@ TickerObj.prototype.setTickerMinMax = function (tickerMin_, tickerMax_) {
 TickerObj.prototype.pushLoggedData = function (penValueObj_) {
     this.penDataAr.push(penValueObj_);
 };
+TickerObj.prototype.clearLoggedData = function () {
+    this.penDataAr = [];
+};
 //get ranged price value for trends from 0 - 1 scaled agains min and max values
-TickerObj.prototype.rangePrice = function (index_) {
+//if type = 1 then the reange comes from the percent value instead of the price
+TickerObj.prototype.rangePrice = function (index_,type) {
     var retVal = 0;
+    var rawMin = this.tickerMin;
     if (this.penDataAr != null) {
         if (index_ < this.penDataAr.length) {
+
             var span = this.tickerMax - this.tickerMin;
             if (span > 0) {
-                retVal = this.penDataAr[index_].price;
-                retVal = (retVal - this.tickerMin) / span;
+                if (rawMin < 0) {
+                    rawMin = rawMin * -1;
+                }
+                if (type == 1) {// multplie pens means I'm using percent vaules
+                    retVal = this.penDataAr[index_].percent;
+                    //return (selected percent value + adjusted minimum y axis percent value) / span
+                    retVal = (retVal + rawMin) / span;
+                }
+                else {//single pen means we are using price values
+                    retVal = this.penDataAr[index_].price;
+                    //return (selected price - minimum y Axis price value) / span
+                    retVal = (retVal - rawMin) / span;
+                }
             }
         }
     }
@@ -172,6 +190,7 @@ trendsApp.controller('testController', function ($scope) {
    // $scope.onMouseMoveResult = "zzz";
     $scope.timeSlices = 0;
     $scope.zeroYPos = 1000;//used in creating a line or box at the 0 position on the trend if using multiple pens
+    $scope.index = 0;
 
     var penCoord = {
         timeStamp: '',
@@ -179,12 +198,16 @@ trendsApp.controller('testController', function ($scope) {
         y: 0
     };
     //holds data for each individual pen to be displayed on the page as the ruler moves
-    PenCoord = function (timeStamp_,name_,price_,volume_,yPos_){
+    PenCoord = function (timeStamp_,name_,price_,percent_,volume_,yPos_){
         this.timeStamp = timeStamp_;
         this.price = price_;
+        if (percent_ == undefined) {
+            this.percent = 0;
+        } else { this.percent = percent_; }
         this.volume = volume_;
         this.y = yPos_;
         this.name = name_;
+       
     };
     //holds all data to display each pen value and dot position when the ruler is used
     $scope.rulerData = {
@@ -204,6 +227,7 @@ trendsApp.controller('testController', function ($scope) {
         $scope.timeSlices = timeSlices_;
         $scope.rulerData.length = cWidth_;
         $scope.rulerData.height = cHeight_;
+        $scope.index = 0;
         if ((minP_ < 0) && (maxP_ > 0)) {
             var range = maxP_ - minP_;
             if (range > 0) {//make sure we're not dividing by 0
@@ -241,15 +265,31 @@ trendsApp.controller('testController', function ($scope) {
         }
         //clear individual pen coordinate array
         $scope.rulerData.penCoords = [];
+        var penCnt = 0;
+        for (i = 0; i < tickerList.length; i++) {
+            if (tickerList[i].isChecked) {
+                penCnt++;
+            }
+        }
+        $scope.rulerData.penCoords = [];
         index = Math.floor(($scope.rulerData.x - $scope.rulerData.offset) / ($scope.rulerData.length/* - $scope.coords.offset*/) * $scope.timeSlices);
         if (tickerList != null) {
             for (i = 0; i < tickerList.length; i++) {
                 if (tickerList[i].isChecked) {
                     var pCoord = new PenCoord(tickerList[i].getTimeStamp(index), tickerList[i].name, tickerList[i].getPrice(index), 0, 0);
-                    pCoord.y = $scope.rulerData.height - (tickerList[i].rangePrice(index) * $scope.rulerData.height);
+                    if (penCnt > 1) {
+                        t1 = tickerList[i].rangePrice(index,1);
+                    }
+                    else {
+                        t1 = tickerList[i].rangePrice(index,0);
+                    }
+                    
+                    pCoord.y = $scope.rulerData.height - (t1 * $scope.rulerData.height);
                     $scope.rulerData.penCoords.push(pCoord);
+                    //penCnt = 2;
                 }
             }
+            
         }
       
     };
