@@ -1,0 +1,10 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\sdClassLibrary.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\EntityFramework.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Debug\sdClassLibrary.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Debug\sdClassLibrary.pdb

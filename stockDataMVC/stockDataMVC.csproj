@@ -46,6 +46,10 @@
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="sdClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\sdClassLibrary\bin\Release\sdClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -126,27 +130,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\StockDataModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StockDataModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StockDataModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StockDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StockDataModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StockDataModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StockIndex.cs">
-      <DependentUpon>StockDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StockQuoteLog.cs">
-      <DependentUpon>StockDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,23 +166,6 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\StockDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StockDataModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\StockDataModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StockDataModel.edmx</DependentUpon>
-      <LastGenOutput>StockDataModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\StockDataModel.edmx.diagram">
-      <DependentUpon>StockDataModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\StockDataModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StockDataModel.edmx</DependentUpon>
-      <LastGenOutput>StockDataModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular-sanitize.min.js.map" />
@@ -1001,6 +967,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -7,7 +7,8 @@ using System.Data.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using stockDataMVC.Models;
+//using stockDataMVC.Models;
+using sdClassLibrary.Models;
 using System.Data.Entity.SqlServer;
 
 namespace stockDataMVC.Controllers

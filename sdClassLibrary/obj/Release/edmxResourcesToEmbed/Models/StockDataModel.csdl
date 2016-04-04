@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="stdataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="StockIndex">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tickerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="companyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="StockQuoteLog">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="stockIndexID" Type="Int32" Nullable="false" />
+    <Property Name="timeStamp" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="lastSale" Type="Single" Nullable="false" />
+    <Property Name="volume" Type="Single" Nullable="false" />
+    <Property Name="askSize" Type="Single" Nullable="false" />
+    <Property Name="bidSize" Type="Single" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="stdataEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="StockIndexes" EntityType="Self.StockIndex" />
+    <EntitySet Name="StockQuoteLogs" EntityType="Self.StockQuoteLog" />
+  </EntityContainer>
+</Schema>

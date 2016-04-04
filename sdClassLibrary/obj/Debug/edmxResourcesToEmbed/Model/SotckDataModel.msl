@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="stdataModelStoreContainer" CdmEntityContainer="stdataEntities">
+    <EntitySetMapping Name="StockIndexes">
+      <EntityTypeMapping TypeName="stdataModel.StockIndex">
+        <MappingFragment StoreEntitySet="StockIndexes">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="tickerName" ColumnName="tickerName" />
+          <ScalarProperty Name="companyName" ColumnName="companyName" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StockQuoteLogs">
+      <EntityTypeMapping TypeName="stdataModel.StockQuoteLog">
+        <MappingFragment StoreEntitySet="StockQuoteLogs">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="stockIndexID" ColumnName="stockIndexID" />
+          <ScalarProperty Name="timeStamp" ColumnName="timeStamp" />
+          <ScalarProperty Name="lastSale" ColumnName="lastSale" />
+          <ScalarProperty Name="volume" ColumnName="volume" />
+          <ScalarProperty Name="askSize" ColumnName="askSize" />
+          <ScalarProperty Name="bidSize" ColumnName="bidSize" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

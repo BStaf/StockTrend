@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace stockDataMVC.Models
+namespace sdClassLibrary.Models
 {
     using System;
     using System.Collections.Generic;
