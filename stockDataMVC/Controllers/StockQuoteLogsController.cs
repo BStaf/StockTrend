@@ -37,6 +37,7 @@ namespace stockDataMVC.Controllers
         {
             public IDictionary<int,StPenData> stockPenDataDict { get; set; }
             public int slices { get; set; }
+            public IList<DateTime> trendTimeList { get; set; }
            // public IEnumerable<StData> stockDataList { get; set; }
 
         }
@@ -84,9 +85,13 @@ namespace stockDataMVC.Controllers
             StDataModel sModel = new StDataModel();
             int trendedDays = 5;
             DateTime startDT = DateTime.Now.AddDays(-trendedDays);
-            startDT= startDT.AddHours(startDT.Hour * -1);
+            startDT= startDT.AddHours((startDT.Hour * -1)+9);
+            startDT = startDT.AddMinutes((startDT.Minute * -1) + 30);
+            //startDT.AddMinutes
             int timeSlices = 200;
             int actualSlices = 0;//sometimes the timeslices I get don't match the amount I'm lookign for. This is my quick fix until I figure this out
+            int maxSlicesKey = 0;//dictionary key of a record with the maximum slices
+            int checkSlices = 0;
             int minutesToGrab = getLoggedDays(startDT, DateTime.Now);
             bool multiplePens = false;
             minutesToGrab = minutesToGrab * 450 / timeSlices;
@@ -133,7 +138,7 @@ namespace stockDataMVC.Controllers
                 //this works but produces a rediculous query// I'll revisit this when I can efficiently do this query in linq 
                 var query = (from data in db.StockQuoteLogs
                             //let e = new {(data.timeStamp.Ticks / divider) / 90}
-                            let d = SqlFunctions.DateAdd("mi", SqlFunctions.DateDiff("mi", DateTime.MinValue, data.timeStamp) / minutesToGrab, DateTime.MinValue)
+                             let d = SqlFunctions.DateAdd("mi", SqlFunctions.DateDiff("mi", DateTime.MinValue, data.timeStamp) / minutesToGrab * minutesToGrab, DateTime.MinValue)
                             where ids == data.stockIndexID && startDT < data.timeStamp 
                             
                             // orderby data.timeStamp descending
@@ -171,7 +176,7 @@ namespace stockDataMVC.Controllers
                     stPennObj.tickerName = "";
                     stPennObj.maxValue = 0;
                     stPennObj.minValue = 0;
-                    actualSlices = 0;
+                    checkSlices = 0;
                     //float lastPrice = 0;
                     bool FirstPass = true;
                     foreach (var item in query)
@@ -213,19 +218,31 @@ namespace stockDataMVC.Controllers
                                 stPennObj.minValue = stObj.price;
                         }
                         sList.Add(stObj);
-                        actualSlices++;
+                        checkSlices++;
                         
                     }
-                    
-                    
+                    //get record count and key of object with the max amount of slices
+                    if (checkSlices > actualSlices)
+                    {
+                        actualSlices = checkSlices;
+                        maxSlicesKey = ids;
+                    }
                     sList = sList.OrderBy(o => o.timestamp).ToList();
                     stPennObj.stockDataList = sList;
                     stPenDataDict.Add(ids, stPennObj);
 
                 }
             }
+            List<DateTime> trendDTList = new List<DateTime>();
+            if (stPenDataDict.ContainsKey(maxSlicesKey)) { 
+                for (int i = 0; i < stPenDataDict[maxSlicesKey].stockDataList.Count; i++)
+                {
+                    trendDTList.Add(stPenDataDict[maxSlicesKey].stockDataList[i].timestamp);
+                }
+            }
             sModel.stockPenDataDict = stPenDataDict;
             sModel.slices = actualSlices;
+            sModel.trendTimeList = trendDTList;
 
            // sModel.stockDataList = (IEnumerable)stDataList;
             return View(sModel);
