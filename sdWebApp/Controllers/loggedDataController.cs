@@ -30,6 +30,8 @@ namespace sdWebApp.Controllers
         public float minValPrice { get; set; }
         public float minValPercent { get; set; }
         public int maxRecordsPerItem { get; set; }
+        public DateTime firstLoggedDT { get; set; } //earliest logged record
+        public DateTime lastLoggedDT { get; set; } //latest logged record
     }
     [RoutePrefix("api/stocks")]
     public class loggedDataController : ApiController
@@ -53,7 +55,11 @@ namespace sdWebApp.Controllers
             {
                 return NotFound();
             }*/
-            DateTime startDT = getPerviousLoggedDay(DateTime.Now);
+            int trendedDays = 5;
+            DateTime startDT = DateTime.Now.AddDays(-trendedDays);
+            //startDT = startDT.AddHours((startDT.Hour * -1) + 9);
+            //startDT = startDT.AddMinutes((startDT.Minute * -1) + 30);
+            //DateTime startDT = getPerviousLoggedDay(DateTime.Now);
             DateTime stopDT = DateTime.Now;
             // TrendDataObj getLoggedData(int[] ids, DateTime startDT, DateTime stopDT, int timeSlices)
             TrendDataObj retVal = getLoggedData(tickers, startDT, stopDT, 200);
@@ -124,6 +130,8 @@ namespace sdWebApp.Controllers
             int minutesToGrab = 0;
             
             TrendDataObj retObj = new TrendDataObj();
+            DateTime firstDT = DateTime.Now;
+            DateTime lastDT = DateTime.Now;
             //Dictionary<string, float> lastPriceDict;// = new Dictionary<int, float>();
             retObj.maxValPrice = 0;
             retObj.maxValPercent = 0;
@@ -156,7 +164,8 @@ namespace sdWebApp.Controllers
             //this is used in calculating the percent changed
             var lastPriceDict = getLastDaysPrices(tickerStrList, startDT);
             //allocate list for logged data
-            retObj.loggedDataList = new List<LoggedDataObj>();
+            retObj.loggedDataList = new List<LoggedDataObj>(); 
+            bool firstPass = true;
             //query logged data for each id
             for (int i = 0; i < tickerStrList.Length; i++)
             {
@@ -191,7 +200,7 @@ namespace sdWebApp.Controllers
                 if (query.Count() > 0)
                 {
                     int recordCount = 0;
-                    bool firstPass = true;
+                    
                     
                     foreach (var item in query)
                     {
@@ -205,23 +214,24 @@ namespace sdWebApp.Controllers
                         //set initial min max values
                         if (firstPass)
                         {
+                            firstDT = item.time;
                             retObj.maxValPrice = logDObj.price;
                             retObj.maxValPercent = logDObj.percent;
                             retObj.minValPrice = logDObj.price;
                             retObj.minValPercent = logDObj.percent;
+                            firstPass = false;
                         }
                         else
-                        {
+                        {//upddate min and max values
                             if (retObj.maxValPrice < logDObj.price)
-                            {
                                 retObj.maxValPrice = logDObj.price;
-                                retObj.maxValPercent = logDObj.percent;
-                            }
                             else if (retObj.minValPrice > logDObj.price)
-                            {
                                 retObj.minValPrice = logDObj.price;
+                            if (retObj.maxValPercent < logDObj.percent)
+                                retObj.maxValPercent = logDObj.percent;
+                            else if (retObj.minValPercent > logDObj.percent)
                                 retObj.minValPercent = logDObj.percent;
-                            }
+                            lastDT = item.time;
                         }
                         recordCount++;
                         //add this record to data log list
@@ -231,6 +241,8 @@ namespace sdWebApp.Controllers
                     if (recordCount > retObj.maxRecordsPerItem)
                     {
                         retObj.maxRecordsPerItem = recordCount;
+                        retObj.firstLoggedDT = firstDT;
+                        retObj.lastLoggedDT = lastDT;
                     }
                 }        
             }

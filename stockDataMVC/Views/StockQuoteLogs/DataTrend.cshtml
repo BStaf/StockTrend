@@ -1,15 +1,15 @@
-﻿@model stockDataMVC.Controllers.StockQuoteLogsController.StDataModel  
-
+﻿@model stockDataMVC.Controllers.StockQuoteLogsController.TrendDataObj
+<script src="~/Scripts/TrendMenuAJS.js"></script>
 <div class="row">
     <div class="col-sm-12">
-        
+
 
 <script>
     var pvObj
     @{
         //a couple of things are going on here. In Razor, I am building strings of coordinates for and SVG path.
         //in javascript, I am taking all of the values and pasing it to TrendMenuAS.js to create an object that holds all the data
-        Dictionary<int, string> penSVGStrDict = new Dictionary<int, string>();
+        Dictionary<string, string> penSVGStrDict = new Dictionary<string, string>();
                 //class penData
 
         int x = 0;
@@ -20,119 +20,101 @@
         float pMin = 0;
         float pMax = 0;
         float minPercentOffset = 0;
-        bool firstPass = true;
+        bool firstPass = false;
         @:var pvObj;
-                @:var pvAr = [];
+        @:var pvAr = [];
+        @:tickerList = [];
+        @:var tickerIndex = 0;
 
-        @:var tickerIndex =0;
-                if (Model.stockPenDataDict.Count > 1){
+        if (Model.loggedDataList.Count > Model.maxRecordsPerItem){
             muliplePens = true;
+        }
+        string tickerName = "";
+        
 
-            //get the largest Max value and smallest Min values of all pens
-            foreach (var item in Model.stockPenDataDict)
-            {
-                if (firstPass)
-                {
-                    pMax = item.Value.maxValue;
-                    pMin = item.Value.minValue;
-                    firstPass = false;
-                }
-                else
-                {
-                    if (pMax < item.Value.maxValue)
-                    {
-                        pMax = item.Value.maxValue;
-                    }
-                    if (pMin > item.Value.minValue)
-                    {
-                        pMin = item.Value.minValue;
-                    }
-                }
-            }
+
+        //create min max y Axis values for  trend
+        float range = 0;
+        if (!muliplePens){
+            range = Model.maxValPrice - Model.minValPrice;
+            pMin = Model.minValPrice - (float)(range * 0.15);
+            pMax = Model.maxValPrice + (float)(range * 0.15);
+        }
+        else
+        {
+            range = Model.maxValPercent - Model.minValPercent;
+            pMin = Model.minValPercent - (float)(range * 0.15);
+            pMax = Model.maxValPercent + (float)(range * 0.15);
             if (pMin < 0)
             {
                 minPercentOffset = pMin * -1;
             }
-
         }
-        firstPass = true;
-        foreach (var item in Model.stockPenDataDict) {
-            //item.Value.stockDataList
-            @:pvAr = [];
-                    //get index to javascript ticker object
-            @:tickerIndex = getTickerIndexFromID(@Html.DisplayFor(p => item.Key));
-
-
+        range = pMax - pMin;
+        float chartPoint = 0;
+        x = 0;
+        for (int i=0; i< Model.loggedDataList.Count;i++)
+        {
+            var item = Model.loggedDataList[i];
+            if (tickerName != item.name) {
+                @:if (tickerIndex > 0){
+                    @:tObj = new TickerObj(0, '@Html.DisplayFor(n => tickerName)',@Html.DisplayFor(p => pMax),@Html.DisplayFor(p => pMin),pvAr);
+                    @:tickerList.push(tObj);                  
+                @:}
+                @:pvAr = []; //penData Array used in tickerObject
+                @://tickerList[tickerIndex].clearLoggedData();
+                @:tickerIndex++;
+                tickerName = item.name;
+                firstPass = true;
+                x = 0;
+            }
             if (!muliplePens){
-
-                pMax = item.Value.maxValue;
-                pMin = item.Value.minValue;
+                chartPoint = item.price;
             }
-            if (firstPass)
-            {
-                float range = pMax - pMin;
-                pMin = pMin - (float)(range * 0.15);
-                pMax = pMax + (float)(range * 0.15);
-                firstPass = false;
-                @:tickerList[tickerIndex].clearLoggedData();
+            else {
+                chartPoint = item.percent + minPercentOffset;
             }
-
-            //}
-            @:if (tickerIndex >= 0){
-                                @:tickerList[tickerIndex].setTickerMinMax(@Html.DisplayFor(p => pMin),@Html.DisplayFor(p => pMax));
-                            @:}
-                    for (int i = 0; i < item.Value.stockDataList.Count; i++)
+            float tmp3 = (chartPoint - (pMin + minPercentOffset));
+            yPos = cHeight - tmp3 / (range) * cHeight;
+            xPos = x * cLength / Model.maxRecordsPerItem + 40; //40 is the offset in pixels from beginning of y axis
+            if (firstPass) {
+                penSVGStrDict.Add(tickerName, ("M" + xPos.ToString() + " " + yPos));//begin a new path string for this ticker
+            }
+            else
             {
-                float chartPoint = item.Value.stockDataList[i].price;
-                float chartMin = pMin;
-                float chartMax = pMax;
-
-                if (muliplePens) {
-                    chartPoint = item.Value.stockDataList[i].percent+minPercentOffset;
-                    chartMin = pMin + minPercentOffset;
-                    chartMax = pMax + minPercentOffset;
-                }
-                yPos = cHeight - (chartPoint - chartMin) / (chartMax - chartMin) * cHeight;
-                xPos = i * cLength / Model.slices + 40; //40 is the offset in pixels from beginning of y axis
-
-                if (penSVGStrDict.ContainsKey(item.Key))
-                {
-                    penSVGStrDict[item.Key] += " L" + xPos.ToString() + " " + yPos;
-                }
-                else// key not found start new entry
-                {
-                    string str = "M";
-                    str += xPos.ToString() + " " + yPos;
-                    penSVGStrDict.Add(item.Key, str);
-                }
-                @:pvObj = new PenValueObj(@Html.DisplayFor(p => item.Value.stockDataList[i].price),@Html.DisplayFor(pc => item.Value.stockDataList[i].percent),@Html.DisplayFor(v => item.Value.stockDataList[i].volume), '@Html.DisplayFor(t => item.Value.stockDataList[i].timestamp)', '@Html.DisplayFor(n => item.Value.tickerName)');
-                        @:if (tickerIndex >= 0){
-                                    @:tickerList[tickerIndex].pushLoggedData(pvObj);
-                                @:}
-                    }
-
+                penSVGStrDict[tickerName] += " L" + xPos.ToString() + " " + yPos;
+            }
+            @:pvObj = new PenValueObj(@Html.DisplayFor(p => item.price),@Html.DisplayFor(pc => item.percent),@Html.DisplayFor(v => item.volume), '@Html.DisplayFor(t => item.timeStamp)', '@Html.DisplayFor(n => item.name)');
+            @:pvAr.push(pvObj);
+            firstPass = false;
+            x++;
         }
-
+        @:tObj = new TickerObj(0, '@Html.DisplayFor(n => tickerName)',@Html.DisplayFor(p => pMax),@Html.DisplayFor(p => pMin),pvAr);
+        @:tickerList.push(tObj);
+        tickerName = "";
     }
-</script>
-        <div ng-controller="testController" ng-init="init(500,250,40,@Html.DisplayFor(sl => Model.slices),@Html.DisplayFor(m => pMax),@Html.DisplayFor(len => pMin))">
+        </script>
+
+        <div ng-controller="testController" ng-init="init(500,250,40,@Html.DisplayFor(sl => Model.maxRecordsPerItem),@Html.DisplayFor(m => pMax),@Html.DisplayFor(len => pMin))">
 
             <svg height="@Html.DisplayFor(len => cHeight)" width="@Html.DisplayFor(len => cLength)" ng-mousemove="onMouseMove($event)" ng->
                 <rect x="40" ng-attr-y="{{zeroYPos}}" width="@Html.DisplayFor(len => cLength)" height="500" style="fill:rgba(185,191,206,0.5);stroke-width:0;stroke:rgb(0,0,0);" />
                 <path d="M40 0 L40 @Html.DisplayFor(len => cHeight) L @Html.DisplayFor(len => cLength) @Html.DisplayFor(len => cHeight)" style="stroke:black; fill:none; stroke-width:2" />
 
                 @{
-                    List<string> penColors = new List<string> { "#4251A3", "#CA407C", "#68912E", "#AB7F10", "#2AB78D"};
+                    List<string> penColors = new List<string> { "#4251A3", "#CA407C", "#68912E", "#AB7F10", "#2AB78D" };
                     x = 0;
                 }
-                
+
                 @foreach (var item in penSVGStrDict)
                 {
                     //string maxDisp = (Model.stockPenDataDict[item.Key].maxValue + Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
                     // string minDisp = (Model.stockPenDataDict[item.Key].minValue - Model.stockPenDataDict[item.Key].maxValue * (float)0.01).ToString("0.0");
 
-                    @:<path d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
-                    @:<circle ng-attr-cx="{{rulerData.x-2}}" ng-attr-cy="{{rulerData.penCoords[@Html.DisplayFor(colorItem => x)].y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
+                    @:
+                    <path d="@Html.DisplayFor(modelItem => item.Value)" style="stroke:@Html.DisplayFor(colorItem => penColors[x]); fill:none; stroke-width:2" />
+                    @:
+                    <circle ng-attr-cx="{{rulerData.x-2}}" ng-attr-cy="{{rulerData.penCoords[@Html.DisplayFor(colorItem => x)].y}}" r="3" stroke="black" stroke-width="1" fill="@Html.DisplayFor(colorItem => penColors[x])" />
                     x++;
                 }
                 @{
@@ -168,39 +150,6 @@
 
 
 
-            @foreach (var item in penSVGStrDict)
-            {
 
-                //@Html.DisplayFor(modelItem => item.Value)@:" style="stroke:black; fill:none; stroke-width:2" />
-            }
-<!--<table id="searchTextResults">
-    <tr>
-        <th>time</th>
-        
-        @foreach (var item in Model.stockPenDataDict)
-        {
-            
-            @:<th>@Html.DisplayFor(modelItem => item.Value.tickerName)</th>
-                    
-            @:</tr>
-            for (int i = 0; i < item.Value.stockDataList.Count; i++)
-                {
-                @:<tr>
-                    @:<td>@Html.DisplayFor(modelItem => i)</td>
-                    @:<td>@Html.DisplayFor(modelItem => item.Value.stockDataList[i].timestamp)</td>
-                    @:<td>@Html.DisplayFor(modelItem => item.Value.stockDataList[i].price)</td>
-  
-
-                @:</tr>
-                }
-        }
-        </table>-->
-
-
-
-        </div>
     </div>
-
- 
-
-        
+</div>

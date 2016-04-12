@@ -7,14 +7,48 @@ using System.Data.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Http;
+using System.Net.Http.Headers;
 //using stockDataMVC.Models;
 using sdClassLibrary.Models;
 using System.Data.Entity.SqlServer;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace stockDataMVC.Controllers
 {
     public class StockQuoteLogsController : Controller
     {
+        /***************************************************/
+        public class LoggedDataObj
+        {
+            public string name { get; set; }
+            public DateTime timeStamp { get; set; }
+            public float price { get; set; }
+            public float percent { get; set; }
+            public float volume { get; set; }
+        }
+        public class TrendDataObj
+        {
+            public List<LoggedDataObj> loggedDataList { get; set; }
+            public float maxValPrice { get; set; }
+            public float maxValPercent { get; set; }
+            public float minValPrice { get; set; }
+            public float minValPercent { get; set; }
+            public int maxRecordsPerItem { get; set; }
+            public DateTime firstLoggedDT { get; set; } //earliest logged record
+            public DateTime lastLoggedDT { get; set; } //latest logged record
+        }
+        /*public class StDataModel
+        {
+            public IList<LoggedDataObj> loggedDataList { get; set; }
+            //public int slices { get; set; }
+            public IList<DateTime> trendTimeList { get; set; }
+            // public IEnumerable<StData> stockDataList { get; set; }
+
+        }*/
+        /***************************************************/
+
         public class StData
         {
             public int tickerID { get; set; }
@@ -33,14 +67,14 @@ namespace stockDataMVC.Controllers
             public IList<StData> stockDataList { get; set; }
 
         }
-        public class StDataModel
+       /* public class StDataModel
         {
             public IDictionary<int,StPenData> stockPenDataDict { get; set; }
             public int slices { get; set; }
             public IList<DateTime> trendTimeList { get; set; }
            // public IEnumerable<StData> stockDataList { get; set; }
 
-        }
+        }*/
 
         private stdataEntities db = new stdataEntities();
 
@@ -76,9 +110,90 @@ namespace stockDataMVC.Controllers
             public int volume { get; set; }
             public DateTime time { get; set; }
         }
-        
+       /* public ActionResult DataTrend(string id)
+        {
+            
+            StDataModel sModel = new StDataModel();
+            TrendDataObj trendDataObj = (TrendDataObj)GetDataFromWebApi(id).Wait();
+            
+        }*/
+        // GET: StockQuoteLogs/DataTrend/F_C_AAPL
+        //this replaces old function that handeled the database data collection
+        //this is noew pushed off to the web api service. 
+        //In the end, this page will not be in charge of collecting data at all.
+        //there will be a page that will grab stock data directly via the web api and then live trend it
+        //this will allow the ability to scroll and zoom in and out live.
+        public async Task<ActionResult> DataTrend(string id)
+        {
+            TrendDataObj trendDataObj;
+            if (id == null)
+            
+            {
+                trendDataObj = new TrendDataObj();
+                trendDataObj.loggedDataList = new List<LoggedDataObj>();
+                return View(trendDataObj);
+            }
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:40966/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    string url = @"api/stocks/" + id;// +@"/start/2016-3-20/stop/2016-4-8";
+                    Task<String> response = client.GetStringAsync(url);
+                    trendDataObj = JsonConvert.DeserializeObjectAsync<TrendDataObj>(response.Result).Result;
+                    return View(trendDataObj);
+                }
+            }
+            catch (Exception E)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+        }
+ 
+       /* public TrendDataObj GetDataFromWebApi(string tickers)
+        {
+            
+            
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:40966/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                Task<String> response = client.GetStringAsync("api/stocks/FB_AAPL/start/2016-3-20/stop/2016-4-8");
+                return JsonConvert.DeserializeObjectAsync<Car>(response.Result).Result;
+            }
+        }
+
+        private async Task<TrendDataObj> GetDataFromWebApi(string tickers)
+        {
+            
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:40966/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP GET
+                HttpResponseMessage response = await client.GetAsync("api/stocks/FB_AAPL/start/2016-3-20/stop/2016-4-8");
+                if (response.IsSuccessStatusCode)
+                {
+                    TrendDataObj trendDataObj = await response.Content.ReadAsAsync <TrendDataObj>();
+                    return trendDataObj;
+                    //Product product = await response.Content.ReadAsAsync<Product>();
+                    //Console.WriteLine("{0}\t${1}\t{2}", product.Name, product.Price, product.Category);
+                }
+
+                // HTTP POST
+
+            }
+            return null;
+        }*/
         // GET: StockQuoteLogs/DataTrend/5
-        public ActionResult DataTrend(string id)
+        /*public ActionResult DataTrend(string id)
         {
             Dictionary<int,StPenData> stPenDataDict = new Dictionary<int,StPenData>();
             Dictionary<int,float> lastPriceDict = new Dictionary<int,float>();
@@ -161,12 +276,8 @@ namespace stockDataMVC.Controllers
                     minutesToGrab.ToString() + @", 0) ORDER BY timeStamp ASC";
 
 
-                /*SELECT min(timeStamp) as time,avg(lastSale) as price,avg(volume) as volume
-  FROM dbo.StockQuoteLogs
-  where stockIndexID = 1 AND timeStamp > '3/28/16'
-  group by DATEADD(MINUTE , DATEDIFF(MINUTE,0,timeStamp)/15, 0)
-	ORDER BY time ASC*/
-                //var query = db.stockQuoteCalcs.SqlQuery(qStr).ToList();*/
+
+
                 //List<queryParameters> query = db.StockQuoteLogs.SqlQuery(qStr);
                 List<StData> sList = new List<StData>();
                 if (query.Count() > 0)
@@ -246,7 +357,7 @@ namespace stockDataMVC.Controllers
 
            // sModel.stockDataList = (IEnumerable)stDataList;
             return View(sModel);
-        }
+        }*/
         // GET: StockQuoteLogs/Details/5
         public ActionResult Details(int? id)/*(ICollection<int> ids)*/
         {
@@ -271,7 +382,7 @@ namespace stockDataMVC.Controllers
         // POST: StockQuoteLogs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,stockIndexID,timeStamp,lastSale,volume,askSize,bidSize")] StockQuoteLog stockQuoteLog)
         {
@@ -283,7 +394,7 @@ namespace stockDataMVC.Controllers
             }
 
             return View(stockQuoteLog);
-        }
+        }*/
 
         // GET: StockQuoteLogs/Edit/5
         public ActionResult Edit(int? id)
@@ -305,7 +416,7 @@ namespace stockDataMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,stockIndexID,timeStamp,lastSale,volume,askSize,bidSize")] StockQuoteLog stockQuoteLog)
+        /*public ActionResult Edit([Bind(Include = "ID,stockIndexID,timeStamp,lastSale,volume,askSize,bidSize")] StockQuoteLog stockQuoteLog)
         {
             if (ModelState.IsValid)
             {
@@ -315,6 +426,7 @@ namespace stockDataMVC.Controllers
             }
             return View(stockQuoteLog);
         }
+         */
 
         // GET: StockQuoteLogs/Delete/5
         public ActionResult Delete(int? id)

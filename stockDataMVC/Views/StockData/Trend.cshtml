@@ -17,7 +17,7 @@
                     <tr><th>ticker</th></tr>
                     <tr ng-repeat="it in list | filter:searchText">
                         <!-- <td><input type="checkbox" name="{{it.id}}" onchange="updateTrendList();"><span>{{it.name}}</span></td>-->
-                        <td><input type="checkbox" name="{{it.id}}" ng-model="it.isChecked"><span>{{it.name}} </span></td>
+                        <td><input type="checkbox" name="{{it.name}}" ng-model="it.isChecked"><span>{{it.name}} </span></td>
 
                     </tr>
                 </table>

@@ -18,7 +18,7 @@ $(function () {
 /***************************************************************************
 *                           Global variables
 ***************************************************************************/
-var tickerList = []; //create list of tickers to be selected from
+var tickerList = {}; //create list of tickers to be selected from
 //create list of all stock values paseed to page
 //this array will be treated as a dictionary who's index is the ticker name
 //ex. stockPrices["AAPL"] = PenValue Object
@@ -162,7 +162,7 @@ trendsApp.controller("myCtrl", ["$scope", function ($scope) {
         for (var i in $scope.list) {
             var it = $scope.list[i];
             if (it.isChecked) {
-                $scope.tickerIDAr.push(it.id);
+                $scope.tickerIDAr.push(it.name);
             }
         }
     };
@@ -265,19 +265,19 @@ trendsApp.controller('testController', function ($scope) {
         }
         //clear individual pen coordinate array
         $scope.rulerData.penCoords = [];
-        var penCnt = 0;
-        for (i = 0; i < tickerList.length; i++) {
+       // var penCnt = 0;
+       /* for (i = 0; i < tickerList.length; i++) {
             if (tickerList[i].isChecked) {
                 penCnt++;
             }
-        }
+        }*/
         $scope.rulerData.penCoords = [];
         index = Math.floor(($scope.rulerData.x - $scope.rulerData.offset) / ($scope.rulerData.length/* - $scope.coords.offset*/) * $scope.timeSlices);
         if (tickerList != null) {
             for (i = 0; i < tickerList.length; i++) {
-                if (tickerList[i].isChecked) {
+                //if (tickerList[i].isChecked) {
                     var pCoord = new PenCoord(tickerList[i].getTimeStamp(index), tickerList[i].name, tickerList[i].getPrice(index), 0, 0);
-                    if (penCnt > 1) {
+                    if (tickerList.length > 1) {
                         t1 = tickerList[i].rangePrice(index,1);
                     }
                     else {
@@ -287,7 +287,7 @@ trendsApp.controller('testController', function ($scope) {
                     pCoord.y = $scope.rulerData.height - (t1 * $scope.rulerData.height);
                     $scope.rulerData.penCoords.push(pCoord);
                     //penCnt = 2;
-                }
+               // }
             }
             
         }
