@@ -28,3 +28,7 @@ C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Release\stockDataMVC.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Release\stockDataMVC.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Release\stockDataMVC.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Net.Http.Formatting.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Net.Http.Formatting.xml

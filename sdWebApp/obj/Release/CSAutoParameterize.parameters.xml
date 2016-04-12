@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="stdataEntities-Web.config Connection String" description="stdataEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.StockDataModel.csdl|res://*/Models.StockDataModel.ssdl|res://*/Models.StockDataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=stdata.cgs8s5vqxiye.us-east-1.rds.amazonaws.com;initial catalog=stdata;user id=ReadWriteUser;password=sdwr!!2016;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\OCC\\Documents\\Visual\ Studio\ 2013\\Projects\\stockDataMVC\\stockDataMVC\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='stdataEntities']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\OCC\\Documents\\Visual\ Studio\ 2013\\Projects\\stockDataMVC\\sdWebApp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='stdataEntities']/@connectionString" />
   </parameter>
 </parameters>

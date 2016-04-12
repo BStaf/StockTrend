@@ -137,7 +137,7 @@ namespace stockDataMVC.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:40966/");
+                    client.BaseAddress = new Uri(@"http://ec2-54-187-179-28.us-west-2.compute.amazonaws.com/StockDataApi/");//"http://localhost:40966/");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     string url = @"api/stocks/" + id;// +@"/start/2016-3-20/stop/2016-4-8";
