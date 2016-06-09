@@ -10,8 +10,11 @@ on an MS SQL database hosting in AWS RDS
 This is a Visual Studio 2013 Solution with 4 separate projects
 
 angularSite -> Angular JS website version
+
 sdClassLibrary -> class library that handle connection to the SQL server for stock logged data 
+
 sdWebApp -> asp.net Web Api used by both angular and MVC sites to get logged data from the SQL server
+
 stockDataMVC -> asp.net MVC website version
 
 I am hosting this on an AWS EC2 server.
