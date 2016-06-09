@@ -18,3 +18,6 @@ C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\Sys
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Release\sdWebApp.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Release\sdWebApp.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Release\sdWebApp.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Cors.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.Cors.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.Cors.xml

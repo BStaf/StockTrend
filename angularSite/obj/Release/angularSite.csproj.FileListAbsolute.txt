@@ -1,0 +1,6 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\bin\angularSite.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\bin\angularSite.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\bin\angularSite.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\obj\Release\angularSite.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\obj\Release\angularSite.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\angularSite\obj\Release\angularSite.pdb

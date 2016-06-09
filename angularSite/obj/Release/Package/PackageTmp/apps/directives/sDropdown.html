@@ -1,0 +1,23 @@
+<div class='myClass'>
+	<div class='selector-dd'>
+	<form ng-submit="submit()">
+	<input type="text" name="text" autocomplete="off" ng-model="searchText" ng-click="textFieldSelected()"/>
+	<input type="submit" id="submit" value="Submit" />
+	<span ng-show="itemNotFound">not found</span>
+	<span ng-show="itemAlreadySelected">already selected</span>
+	<div class='selector-list' ng-show="showDropdown">
+	<table id="searchTextResults">
+		<tr ng-repeat="it in searchList | filter:searchText">
+		<td><span ng-click="selectItem(it)">{{it}} </span></td>
+		</tr>
+	</table>
+	<form>
+	</div>
+	</div>
+	<table>
+		<tr><th>Selected<th><tr>
+		<tr ng-repeat="it in selectedList">
+		<td><span><span ng-click="removeItem(it)">X </span>{{it}}</span></td>
+		</tr>
+	</table>
+</div>

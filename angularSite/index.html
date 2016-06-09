@@ -1,0 +1,43 @@
+<DOCTYPE html>
+<html lang="en-US">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script data-require="angular.js@1.2.x" src="/scripts/angular.js" data-semver="1.2.7"></script>
+<script src="apps/app.js"></script>
+<script src="apps/controller.js"></script>
+<script src="apps/directives/sDropdown.js"></script>
+<script src="apps/directives/sChart.js"></script>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Stock Trend Chart</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="index.html">Home</a></li>
+                    <!--<li><a href="contact.html">Contact</a></li>-->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div ng-app="trendChartapp" ng-controller="tcController">
+        <div class="row">
+            <div class="col-sm-3">
+                <s-dropdown search-list="tickerList" selected-list="selectedList" search-text="" action="onTickerUpdate()"><s-select />
+            </div>
+            <div class="col-sm-9">
+
+              <s-chart c-width=500 c-height=300 y-axis-max="chartParams.maxVal" y-axis-min="chartParams.minVal" dt-list="tsList" data-description=0 ticker-data="loggedDataObj"></s-chart>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

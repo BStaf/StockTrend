@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdClassLibrary", "sdClassLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdWebApp", "sdWebApp\sdWebApp.csproj", "{3A727152-8BA6-449C-89E4-14C82DBADF25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "angularSite", "angularSite\angularSite.csproj", "{1759FA59-7D04-4835-8634-E82765097AA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3A727152-8BA6-449C-89E4-14C82DBADF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A727152-8BA6-449C-89E4-14C82DBADF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A727152-8BA6-449C-89E4-14C82DBADF25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1759FA59-7D04-4835-8634-E82765097AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1759FA59-7D04-4835-8634-E82765097AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1759FA59-7D04-4835-8634-E82765097AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1759FA59-7D04-4835-8634-E82765097AA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -32,3 +32,8 @@ C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Debug\stockDataMVC.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Debug\stockDataMVC.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\obj\Debug\stockDataMVC.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Web.Cors.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Web.Http.Cors.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Web.Http.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Web.Http.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\stockDataMVC\bin\System.Web.Http.Cors.xml

@@ -1,3 +1,4 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Debug\sdWebApp.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\sdWebApp.dll.config
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\sdWebApp.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\sdWebApp.pdb
@@ -6,15 +7,17 @@ C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\Ent
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\Newtonsoft.Json.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\sdClassLibrary.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Net.Http.Formatting.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Cors.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.Cors.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.WebHost.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\EntityFramework.xml
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\EntityFramework.SqlServer.xml
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\sdClassLibrary.pdb
-C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\Newtonsoft.Json.xml
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Net.Http.Formatting.xml
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.Cors.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\Newtonsoft.Json.xml
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\bin\System.Web.Http.WebHost.xml
-C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Debug\sdWebApp.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Debug\sdWebApp.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdWebApp\obj\Debug\sdWebApp.pdb
