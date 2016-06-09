@@ -19,5 +19,4 @@ I am hosting this on an AWS EC2 server.
 * Angular Version web site: http://ec2-54-187-179-28.us-west-2.compute.amazonaws.com/AngularSite/index.html
 
 
-
 Built in Visual Studio 2013
