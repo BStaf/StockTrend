@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdWebApp", "sdWebApp\sdWebA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "angularSite", "angularSite\angularSite.csproj", "{1759FA59-7D04-4835-8634-E82765097AA3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stockDataMVC.Tests", "stockDataMVC.Tests\stockDataMVC.Tests.csproj", "{5967DED5-27F7-4F78-80DB-749D17C6DE5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdClassLibrary_Tests", "sdClassLibrary_Tests\sdClassLibrary_Tests.csproj", "{AA67F14E-7ED0-43B5-8468-7B2E844D1191}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +39,20 @@ Global
 		{1759FA59-7D04-4835-8634-E82765097AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1759FA59-7D04-4835-8634-E82765097AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1759FA59-7D04-4835-8634-E82765097AA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5967DED5-27F7-4F78-80DB-749D17C6DE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5967DED5-27F7-4F78-80DB-749D17C6DE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5967DED5-27F7-4F78-80DB-749D17C6DE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5967DED5-27F7-4F78-80DB-749D17C6DE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5967DED5-27F7-4F78-80DB-749D17C6DE5E} = {4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}
+		{AA67F14E-7ED0-43B5-8468-7B2E844D1191} = {4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}
 	EndGlobalSection
 EndGlobal

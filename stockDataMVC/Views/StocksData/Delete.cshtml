@@ -1,0 +1,80 @@
+﻿@model sdClassLibrary.Models.StockQuoteLog
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>StockQuoteLog</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.stockIndexID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.stockIndexID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.timeStamp)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.timeStamp)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.lastSale)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.lastSale)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.volume)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.volume)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.askSize)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.askSize)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.bidSize)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.bidSize)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

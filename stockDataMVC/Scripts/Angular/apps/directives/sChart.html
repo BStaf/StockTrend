@@ -1,0 +1,28 @@
+<div class='trend' style="width:{{cWidth}}; background-color:#F9F9F9">
+    <svg ng-attr-width="{{cWidth}}" ng-attr-height="{{cHeight}}" ng-mousemove="onMouseMove($event)">
+        <!--<rect ng-attr-x="{{textOffset}}" ng-attr-y="{{cHeight-zeroLinePos}}" ng-attr-width="{{cWidth - textOffset}}" ng-attr-height="{{zeroLineYPos}}" style="fill:rgb(0,0,255);" />-->
+        <rect ng-attr-x="{{textOffset}}" ng-attr-y="{{cHeight - zeroLineYPos}}" ng-attr-width="{{cWidth - textOffset}}" ng-attr-height="{{zeroLineYPos}}" style="fill:rgba(185,191,206,0.5);" />
+        <g ng-repeat="pen in penPaths">
+            <path ng-attr-d="{{pen}}" stroke="{{penColors[$index]}}" stroke-width="2" fill="none" />
+        </g>
+        <line ng-attr-x1="{{rulerPos}}" ng-attr-x2="{{rulerPos}}" y1="0" ng-attr-y2="{{cHeight}}" stroke="#5184AF" stroke-width="2" stroke-linecap="round" stroke-dasharray="1, 6" />
+        <path ng-attr-d="{{axisPath}}" stroke="black" stroke-width="3" fill="none" />
+        <text x="2" y="15" fill="black" font-size="13" ng-model="yAxisMax">{{yAxisMax  | number:2}}</text>
+        <text x="2" ng-attr-y="{{cHeight}}" fill="black" font-size="13" ng-model="yAxisMin">{{yAxisMin  | number:2}}</text>
+    </svg>
+    <div style="width:{{cWidth}}">
+        <table class="table table-striped">
+            <tr>
+                <td>Ticker</td>
+                <td>Price</td>
+                <td>Time Stamp</td>
+            </tr>
+            <tr ng-repeat="dataObj in tickerData">
+                <td><font color="{{penColors[$index]}}">{{dataObj.name}}<font></td>
+                <td>{{dataObj.data[dataIndex][0] | number:2}}</td>
+                <td>{{dtList[dataIndex] | date:'MM/dd/yyyy - h:mma'}}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>

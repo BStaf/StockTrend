@@ -8,3 +8,13 @@ C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\b
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Release\sdClassLibrary.csprojResolveAssemblyReference.cache
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Release\sdClassLibrary.dll
 C:\Users\OCC\Documents\Visual Studio 2013\Projects\stockDataMVC\sdClassLibrary\obj\Release\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\sdClassLibrary.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\EntityFramework.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\obj\Release\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\obj\Release\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary\obj\Release\sdClassLibrary.csprojResolveAssemblyReference.cache

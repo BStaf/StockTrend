@@ -1,0 +1,16 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\obj\Debug\stockDataMVC.Tests.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\stockDataMVC.Tests.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\stockDataMVC.Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\stockDataMVC.Tests.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\stockDataMVC.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\System.Web.Optimization.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\stockDataMVC.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\System.Web.Optimization.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\EntityFramework.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\bin\Debug\Newtonsoft.Json.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\obj\Debug\stockDataMVC.Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\stockDataMVC.Tests\obj\Debug\stockDataMVC.Tests.pdb

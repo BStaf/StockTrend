@@ -1,0 +1,74 @@
+﻿@model sdClassLibrary.Models.StockQuoteLog
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>StockQuoteLog</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.stockIndexID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.stockIndexID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.timeStamp)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.timeStamp)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.lastSale)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.lastSale)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.volume)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.volume)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.askSize)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.askSize)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.bidSize)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.bidSize)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

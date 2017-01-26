@@ -4,3 +4,9 @@ C:\Users\OCC\documents\visual studio 2013\Projects\stockDataMVC\angularSite\bin\
 C:\Users\OCC\documents\visual studio 2013\Projects\stockDataMVC\angularSite\obj\Debug\angularSite.csprojResolveAssemblyReference.cache
 C:\Users\OCC\documents\visual studio 2013\Projects\stockDataMVC\angularSite\obj\Debug\angularSite.dll
 C:\Users\OCC\documents\visual studio 2013\Projects\stockDataMVC\angularSite\obj\Debug\angularSite.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\bin\angularSite.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\bin\angularSite.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\bin\angularSite.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\obj\Debug\angularSite.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\obj\Debug\angularSite.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\angularSite\obj\Debug\angularSite.csprojResolveAssemblyReference.cache

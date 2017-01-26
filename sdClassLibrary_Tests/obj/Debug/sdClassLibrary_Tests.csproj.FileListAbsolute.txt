@@ -1,0 +1,12 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\sdClassLibrary_Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\sdClassLibrary_Tests.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\EntityFramework.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\obj\Debug\sdClassLibrary_Tests.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\obj\Debug\sdClassLibrary_Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\obj\Debug\sdClassLibrary_Tests.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\sdClassLibrary_Tests.dll.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\sdClassLibrary_Tests\bin\Debug\EntityFramework.SqlServer.xml

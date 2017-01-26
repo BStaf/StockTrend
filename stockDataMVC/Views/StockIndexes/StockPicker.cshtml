@@ -1,0 +1,76 @@
+﻿@model IList<string>
+
+@{
+    ViewBag.Title = "Stock Picker";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table, th, td{
+        width: 90px;
+        text-align: center;
+        vertical-align: central;
+        border: 1px solid black;
+        border-collapse: collapse;
+        
+    }
+    /*td:hover{
+        background-color: #d6eae6;
+    }*/
+
+</style>
+
+<p></p>
+<table id="stTable">
+    <tr><th>Ticker</th></tr>
+    @foreach (var ticker in Model)
+    {
+        <tr><td  value='@ticker'>@ticker</td></tr>
+    }
+</table>
+
+<script>
+    var stockList = [];
+    $(document).ready(function () {
+        $('#stTable td').click(function () {
+            var update = false;
+            var tName = $(this).text();//get ticker name
+            var index = $.inArray(tName, stockList);//locate ticker in array if exists
+            if (index == -1)
+            {//if ticker is not already in the array, add it and change background color
+                if (stockList.length < 5)
+                {//we are only going to plot 5 tickers.
+                    $(this).css("background-color", "#6fb3d5");
+                    stockList.push(tName);
+                    update = true; //update chart
+                }
+                else { }//create warning of max ticker count
+            }
+            else
+            {//ticker is already in the list. Remove it.
+                $(this).css("background-color", "white");
+                stockList.splice(index, 1);//remove ticker from array
+                update = true; //update chart
+            }
+            if (update)
+            {
+                function UserSelectPressed(id) {
+                    //document.getElementById("subScreen").innerHTML = "Hello World";
+                    path = "/UserCards/Edit/";
+                  //  path = path.concat(id);
+                   // $("#chart").load(path);
+                    $("#chart").load(path, { StockList: stockList }, function () {
+                        alert("Loaded");
+                    });
+                }
+                //call chart subview
+            }
+        })
+   });
+</script>
+
+
+str reverse (string str){
+    if (str.len == 1)
+        return str.pop;
+    return str.pop + reverse(str);
+}
