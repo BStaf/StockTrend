@@ -25,8 +25,20 @@ namespace sdClassLibrary_Tests
         public void getLoggedDataSingleString_validStringAndRange_ReturnsSomeLoggedDataForThatTicker()
         {
             StockData sd = new StockData();
-            var data = sd.getLoggedData("F", DateTime.Now.AddDays(-5), DateTime.Now);
+            DateTime dt = Convert.ToDateTime("9/10/2016");
+            var data = sd.getLoggedData("F", dt.AddDays(-5), dt, 200);
             Assert.IsTrue(data.tickerName == "F") ;
+        }
+        [TestMethod]
+        public void getLoggedDataSingleString_validStringAndRange_shouldReturnCorrectNumberOfTimeSlices()
+        {
+            StockData sd = new StockData();
+            DateTime dt = Convert.ToDateTime("9/10/2016");
+            //the chart will use a given number of data points The getLoggedData function should return the 
+            //propper number of data points requested 
+            int timeSlices = 20;
+            var data = sd.getLoggedData("F", dt.AddDays(-5), dt, 20);
+            Assert.IsTrue(data.loggedData.Count == timeSlices);
         }
     }
 }
