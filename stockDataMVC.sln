@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stockDataMVC.Tests", "stock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdClassLibrary_Tests", "sdClassLibrary_Tests\sdClassLibrary_Tests.csproj", "{AA67F14E-7ED0-43B5-8468-7B2E844D1191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockLogger", "StockLogger\StockLogger.csproj", "{6001885E-1870-4FA6-BB81-1B9339146478}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockLogger_Tests", "StockLogger_Tests\StockLogger_Tests.csproj", "{5840E994-5C1C-49AE-9DF7-F3DDD99B872F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA67F14E-7ED0-43B5-8468-7B2E844D1191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6001885E-1870-4FA6-BB81-1B9339146478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6001885E-1870-4FA6-BB81-1B9339146478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6001885E-1870-4FA6-BB81-1B9339146478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6001885E-1870-4FA6-BB81-1B9339146478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5840E994-5C1C-49AE-9DF7-F3DDD99B872F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5840E994-5C1C-49AE-9DF7-F3DDD99B872F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5840E994-5C1C-49AE-9DF7-F3DDD99B872F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5840E994-5C1C-49AE-9DF7-F3DDD99B872F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5967DED5-27F7-4F78-80DB-749D17C6DE5E} = {4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}
 		{AA67F14E-7ED0-43B5-8468-7B2E844D1191} = {4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}
+		{5840E994-5C1C-49AE-9DF7-F3DDD99B872F} = {4A2C2522-4FBB-4C79-B1D0-7EA1F2F302D2}
 	EndGlobalSection
 EndGlobal

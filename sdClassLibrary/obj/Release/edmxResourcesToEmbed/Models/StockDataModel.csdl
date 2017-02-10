@@ -8,6 +8,7 @@
     <Property Name="tickerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="companyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="LoggedDatas" Relationship="stdataModel.FK_LoggedData_StockIndexes" FromRole="StockIndex" ToRole="LoggedData" />
   </EntityType>
   <EntityType Name="StockQuoteLog">
     <Key>
@@ -24,5 +25,43 @@
   <EntityContainer Name="stdataEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="StockIndexes" EntityType="Self.StockIndex" />
     <EntitySet Name="StockQuoteLogs" EntityType="Self.StockQuoteLog" />
+    <EntitySet Name="LoggedDatas" EntityType="stdataModel.LoggedData" />
+    <AssociationSet Name="FK_LoggedData_StockIndexes" Association="stdataModel.FK_LoggedData_StockIndexes">
+      <End Role="StockIndex" EntitySet="StockIndexes" />
+      <End Role="LoggedData" EntitySet="LoggedDatas" />
+    </AssociationSet>
+    <EntitySet Name="LoggedTimeRanges" EntityType="stdataModel.LoggedTimeRanx" />
   </EntityContainer>
+  <EntityType Name="LoggedData">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="stockID" Type="Int32" Nullable="false" />
+    <Property Name="timestamp" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="volume" Type="Double" Nullable="false" />
+    <NavigationProperty Name="StockIndex" Relationship="stdataModel.FK_LoggedData_StockIndexes" FromRole="LoggedData" ToRole="StockIndex" />
+  </EntityType>
+  <Association Name="FK_LoggedData_StockIndexes">
+    <End Type="stdataModel.StockIndex" Role="StockIndex" Multiplicity="1" />
+    <End Type="stdataModel.LoggedData" Role="LoggedData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StockIndex">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LoggedData">
+        <PropertyRef Name="stockID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="LoggedTimeRanx">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="StopTime" Type="Time" Nullable="false" Precision="7" />
+  </EntityType>
 </Schema>

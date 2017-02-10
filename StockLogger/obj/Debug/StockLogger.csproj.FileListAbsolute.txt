@@ -1,0 +1,12 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\StockLogger.exe.config
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\StockLogger.exe
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\StockLogger.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\obj\Debug\StockLogger.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\obj\Debug\StockLogger.exe
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\obj\Debug\StockLogger.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\EntityFramework.xml
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger\bin\Debug\EntityFramework.SqlServer.xml

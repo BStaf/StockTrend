@@ -24,5 +24,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="LoggedDatas">
+      <EntityTypeMapping TypeName="stdataModel.LoggedData">
+        <MappingFragment StoreEntitySet="LoggedData">
+          <ScalarProperty Name="volume" ColumnName="volume" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+          <ScalarProperty Name="stockID" ColumnName="stockID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LoggedTimeRanges">
+      <EntityTypeMapping TypeName="stdataModel.LoggedTimeRanx">
+        <MappingFragment StoreEntitySet="LoggedTimeRanges">
+          <ScalarProperty Name="StopTime" ColumnName="StopTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

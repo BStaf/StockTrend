@@ -1,5 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="stdataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="LoggedData">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="stockID" Type="int" Nullable="false" />
+    <Property Name="timestamp" Type="datetime" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+    <Property Name="volume" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LoggedTimeRanges">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LogDate" Type="date" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+    <Property Name="StopTime" Type="time" Precision="7" Nullable="false" />
+  </EntityType>
   <EntityType Name="StockIndexes">
     <Key>
       <PropertyRef Name="ID" />
@@ -21,8 +40,26 @@
     <Property Name="askSize" Type="real" Nullable="false" />
     <Property Name="bidSize" Type="real" Nullable="false" />
   </EntityType>
+  <Association Name="FK_LoggedData_StockIndexes">
+    <End Role="StockIndexes" Type="Self.StockIndexes" Multiplicity="1" />
+    <End Role="LoggedData" Type="Self.LoggedData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StockIndexes">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LoggedData">
+        <PropertyRef Name="stockID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="stdataModelStoreContainer">
+    <EntitySet Name="LoggedData" EntityType="Self.LoggedData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoggedTimeRanges" EntityType="Self.LoggedTimeRanges" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StockIndexes" EntityType="Self.StockIndexes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StockQuoteLogs" EntityType="Self.StockQuoteLogs" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_LoggedData_StockIndexes" Association="Self.FK_LoggedData_StockIndexes">
+      <End Role="StockIndexes" EntitySet="StockIndexes" />
+      <End Role="LoggedData" EntitySet="LoggedData" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

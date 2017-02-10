@@ -27,5 +27,7 @@ namespace sdClassLibrary.Models
     
         public virtual DbSet<StockIndex> StockIndexes { get; set; }
         public virtual DbSet<StockQuoteLog> StockQuoteLogs { get; set; }
+        public virtual DbSet<LoggedData> LoggedDatas { get; set; }
+        public virtual DbSet<LoggedTimeRanx> LoggedTimeRanges { get; set; }
     }
 }

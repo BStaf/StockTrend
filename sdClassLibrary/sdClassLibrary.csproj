@@ -49,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Models\LoggedData.cs">
+      <DependentUpon>StockDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoggedTimeRanx.cs">
+      <DependentUpon>StockDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\StockData.cs" />
     <Compile Include="Models\StockDataModel.Context.cs">
       <AutoGen>True</AutoGen>

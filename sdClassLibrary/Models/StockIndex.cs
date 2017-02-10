@@ -14,9 +14,16 @@ namespace sdClassLibrary.Models
     
     public partial class StockIndex
     {
+        public StockIndex()
+        {
+            this.LoggedDatas = new HashSet<LoggedData>();
+        }
+    
         public int ID { get; set; }
         public string tickerName { get; set; }
         public string companyName { get; set; }
         public string notes { get; set; }
+    
+        public virtual ICollection<LoggedData> LoggedDatas { get; set; }
     }
 }

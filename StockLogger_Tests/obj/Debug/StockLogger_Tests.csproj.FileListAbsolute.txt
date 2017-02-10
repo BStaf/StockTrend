@@ -1,0 +1,11 @@
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\StockLogger_Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\StockLogger_Tests.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\StockLogger.exe
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\StockLogger.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\obj\Debug\StockLogger_Tests.csprojResolveAssemblyReference.cache
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\obj\Debug\StockLogger_Tests.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\obj\Debug\StockLogger_Tests.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\sdClassLibrary.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\EntityFramework.dll
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\sdClassLibrary.pdb
+C:\Users\OCC\Documents\Visual Studio 2013\Projects\StockTrend\StockLogger_Tests\bin\Debug\EntityFramework.xml

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity;
 
 namespace sdClassLibrary.Models
 {
@@ -47,18 +48,39 @@ namespace sdClassLibrary.Models
             }
             
         }
-        public StockLoggedData getLoggedData(string ticker, DateTime startDT, DateTime endDT,int timeSlices)
+        public StockLoggedData getLoggedData(string ticker, DateTime startDT, DateTime endDT, int timeSlices)
         {
-            int minutesToGrab = 0;
+            if (timeSlices == 0) return null;
             StockLoggedData retVal;
             startDT = setToBeginningOfTradingDay(startDT);
             endDT = setToEndOfTradingDay(endDT);
-            int loggedDays = getLoggedDays(startDT, endDT);
-            minutesToGrab = (int)((loggedDays * 6.5 * 60) / timeSlices);
+            int minutesToGrab = (int)Math.Round((float)getLoggedSpanInMinutes(startDT, endDT) / timeSlices);
+            
+            return getStockLoggedDataObjectForTicker(ticker,startDT,endDT,minutesToGrab);
+        }
+        public List<StockLoggedData> getLoggedData(List<string> tickerList, DateTime startDT, DateTime endDT, int timeSlices)
+        {
+            if (timeSlices == 0) return null;
+            List<StockLoggedData> retDataList = new List<StockLoggedData>();
+            startDT = setToBeginningOfTradingDay(startDT);
+            endDT = setToEndOfTradingDay(endDT);
+            int minutesToGrab = (int)Math.Round((float)getLoggedSpanInMinutes(startDT, endDT) / timeSlices);
+            //var data = getLoggedDataFromDataBase(tickerList, startDT, endDT, minutesToGrab);
+            foreach (string ticker in tickerList)
+            {
+                retDataList.Add(getStockLoggedDataObjectForTicker(ticker, startDT, endDT, minutesToGrab));
+            }
+            return retDataList;
+           // throw new Exception("Not yet implemented");
+        }
+        private StockLoggedData getStockLoggedDataObjectForTicker(string ticker, DateTime startDT, DateTime endDT, int minutesToGrab)
+        {
+            StockLoggedData retVal;
             try
             {
-                var stockDataPointList = getLoggedDataFromDataBase(ticker, startDT, endDT, minutesToGrab);
-                float lastDaysPrice = getLastDaysPrice(ticker, startDT);
+                int tickerID = db.StockIndexes.Where(t => t.tickerName == ticker).FirstOrDefault().ID;
+                var stockDataPointList = getLoggedDataFromDataBase(tickerID, startDT, endDT, minutesToGrab);
+                float lastDaysPrice = getLastDaysPrice(tickerID, startDT);
                 retVal = new StockLoggedData()
                 {
                     lastDaysPrice = lastDaysPrice,
@@ -67,19 +89,17 @@ namespace sdClassLibrary.Models
                     loggedData = stockDataPointList,
                     tickerName = ticker
                 };
+                if (retVal.maxPrice < lastDaysPrice) retVal.maxPrice = lastDaysPrice;
+                else if (retVal.minPrice > lastDaysPrice) retVal.minPrice = lastDaysPrice;
             }
             catch (Exception E)
             {
                 throw new Exception("failed to query for logged data. See inner exception.", E);
             }
             return retVal;
-
-            //throw new Exception("Not yet implemented");
         }
-        public List<StockLoggedData> getLoggedData(List<string> tickerList, DateTime startDT, DateTime endDT, int timeSlices)
-        {
-            throw new Exception("Not yet implemented");
-        }
+        
+        
         /// <summary>
         /// gets the number of days that data was logged (skips weekends)
         /// </summary>
@@ -105,15 +125,25 @@ namespace sdClassLibrary.Models
             retVal = (int)t1.DayOfWeek + (7 - (int)t2.DayOfWeek) + (fullWeeks * 7);
             return retVal;
         }
-        /*private DateTime fixTradingDteTimeToTradableDay(DateTime dt)
+        private int getLoggedSpanInMinutes(DateTime startDT, DateTime endDT)
         {
-            if ((int)dt.DayOfWeek == 0)
-                return dt.AddDays(+1);
-            if ((int)dt.DayOfWeek == 6)
-                return dt.AddDays(-1);
-            return dt;
-        }*/
-        private float getLastDaysPrice(string ticker, DateTime startDT)
+            //startDT = startDT.AddDays(-1);
+            startDT = startDT.AddMinutes(-startDT.Minute).AddHours(-startDT.Hour);
+            try
+            {
+                var span = db.LoggedTimeRanges
+                    .Where(l => (l.LogDate >= startDT) && (l.LogDate < endDT))
+                    .Sum(l => DbFunctions.DiffMinutes(l.StartTime, l.StopTime));
+                if (span == null)
+                    return 0;
+                return (int)span;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        private float getLastDaysPrice(int tickerID, DateTime startDT)
         {
             DateTime dt = startDT.AddDays(-1);
             if ((int)dt.DayOfWeek == 0)
@@ -122,11 +152,14 @@ namespace sdClassLibrary.Models
                 dt = dt.AddDays(-1);
             dt = setToBeginningOfTradingDay(dt);
             //get the most recent value of the stock for the last traded day
-            return (float)(db.StockQuoteLogs
-                .Where(sq => (sq.timeStamp > dt)
-                                && (sq.timeStamp < startDT))
-                .OrderByDescending(sq => sq.timeStamp)
-                .Select(sqp => sqp.lastSale).FirstOrDefault());
+            return (float)db.LoggedDatas
+                .Where(sq => (sq.timestamp > dt)
+                                && (sq.timestamp < startDT)
+                                && (sq.stockID == tickerID))
+                .OrderByDescending(sq => sq.timestamp)
+                .Select(sqp => sqp.price).FirstOrDefault();
+            //return (float)data.FirstOrDefault();
+            //.FirstOrDefault());
 
         }
         private DateTime setToBeginningOfTradingDay(DateTime dt)
@@ -139,10 +172,10 @@ namespace sdClassLibrary.Models
         private DateTime setToEndOfTradingDay(DateTime dt)
         {
             //fix stop date time to stop before 4:00 am
-            return dt.AddHours((dt.Hour * -1) + 4)
+            return dt.AddHours((dt.Hour * -1) + 16)
                         .AddMinutes((dt.Minute * -1) + 1);
-        } 
-        private List<StockDataPoint> getLoggedDataFromDataBase(string ticker, DateTime startDT, DateTime endDT, int minutesToGrab)
+        }
+        private List<StockDataPoint> getLoggedDataFromDataBase(int tickerID, DateTime startDT, DateTime endDT, int minutesToGrab)
         {
             //query collects all logged data between start and stop dates
             //uses SQL DATEADD and DATEDIFF to calculate the minutes from some arbitrary start time (DateTime.Min)
@@ -153,23 +186,64 @@ namespace sdClassLibrary.Models
             //This will put a strain on the SQL server, but if not there, it would happen on the web server.
             //This also cuts down on the amount of data passed.
             //I will have to tune the SQL server to handle this query more efficiently
-            return (from data in db.StockQuoteLogs
+            var sData = (from data in db.LoggedDatas
                     //let e = new {(data.timeStamp.Ticks / divider) / 90}
-                    let d = EntityFunctions.AddMinutes(
+                    where tickerID == data.stockID
+                        && startDT < data.timestamp
+                        && endDT > data.timestamp 
+                    let d = DbFunctions.AddMinutes(
                                                DateTime.MinValue,
-                                               EntityFunctions.DiffMinutes(DateTime.MinValue, data.timeStamp) / minutesToGrab)
-                    where /*id == data.stockIndexID &&*/ startDT < data.timeStamp && endDT > data.timeStamp //&& t.tickerName == ticker
-                    join t in db.StockIndexes on
-                       data.stockIndexID equals t.ID
-                    where t.tickerName == ticker
+                                               DbFunctions.DiffMinutes(DateTime.MinValue, data.timestamp) / minutesToGrab)
+                    
                     group data
                         by d into dg
                     select new StockDataPoint
                     {
-                        price = dg.Average(data => data.lastSale),
-                        volume = dg.Average(data => data.volume),
-                        timeStamp = dg.Min(data => data.timeStamp),
-                    }).OrderBy(dt => dt.timeStamp).ToList();
+                        price = (float)dg.Average(data => data.price),
+                        volume = (float)dg.Average(data => data.volume),
+                        timeStamp = dg.Min(data => data.timestamp),
+                    }).OrderBy(dt => dt.timeStamp);//.ToList();
+            return sData.ToList();
         }
+       /* private Dictionary<string , List<StockDataPoint>> getLoggedDataFromDataBase(List<string> tickers, DateTime startDT, DateTime endDT, int minutesToGrab)
+        {
+            Dictionary<string , List<StockDataPoint>> retDict = new Dictionary<string,List<StockDataPoint>>();
+            Dictionary <int,string> idToSymbolDictionary = db.StockIndexes.Where(si => tickers.Contains(si.tickerName)).ToDictionary(si => si.ID, si => si.tickerName);
+            /*var sData = (from data in db.LoggedDatas
+                         //let e = new {(data.timeStamp.Ticks / divider) / 90}
+                         where idToSymbolDictionary.Keys.Contains(data.stockID) 
+                            && startDT < data.timestamp && endDT > data.timestamp
+                         group data by data.stockID into dataG
+
+                         from stock in dataG
+                         let d = DbFunctions.AddMinutes(
+                                                    DateTime.MinValue,
+                                                    DbFunctions.DiffMinutes(DateTime.MinValue, stock.timestamp) / minutesToGrab)
+                         group stock by d into dg
+
+                         select new //StockDataPoint
+                         {
+                             stockID = dg.Min(d => d.stockID),
+                             //name = dg.Min(d => d.StockIndex.tickerName),
+                             price = (float)dg.Average(d => d.price),
+                             volume = (float)dg.Average(d => d.volume),
+                             timeStamp = dg.Min(d => d.timestamp),
+                         }
+                         ).OrderBy(dt => dt.timeStamp).ToList();//.ToList();
+            foreach (var item in sData)
+            {
+                string ticker = idToSymbolDictionary[item.stockID];
+                if (!retDict.ContainsKey(ticker))
+                    retDict.Add(ticker, new List<StockDataPoint>());
+
+                retDict[ticker].Add(new StockDataPoint()
+                {
+                    price = item.price,
+                    volume = item.volume,
+                    timeStamp = item.timeStamp
+                });
+            }*//*
+            return retDict;// sData.ToList();
+        }*/
     }
 }

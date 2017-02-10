@@ -7,6 +7,9 @@
       <Diagram DiagramId="7dbb54dda910457681a62e86cad697a9" Name="Diagram1">
         <EntityTypeShape EntityType="stdataModel.StockIndex" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="stdataModel.StockQuoteLog" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="stdataModel.LoggedData" Width="1.5" PointX="3" PointY="4.625" />
+        <AssociationConnector Association="stdataModel.FK_LoggedData_StockIndexes" />
+        <EntityTypeShape EntityType="stdataModel.LoggedTimeRanx" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
